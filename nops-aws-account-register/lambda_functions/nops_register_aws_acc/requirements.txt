@@ -1,0 +1,4 @@
+cryptography==36.0.0
+pycryptodomex==3.14.1
+requests==2.26.0
+cfnresponse==1.1.2
