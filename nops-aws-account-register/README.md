@@ -1,16 +1,16 @@
 # Nops Account Registration Automation
-- Description of each files and folders are as follows
+- Descriptions of the files and folders are as follows:
 
 ### cloudformation-single-acc-register
-- This folder containes cloudformation template for single aws account register to nops
+- This folder contains CloudFormation template to register a single AWS account with nOps
   
 ### lambda_functions
-- This folder containes python code for lambda function which registers aws accounts to nops.
+- This folder contains the python code for the lambda function which registers AWS accounts to nops.
 
 ### terraform-multi-acc-register-via-stacksets
-- This folder is a terraform module which deploys cloudformation stacksets.
-- Cloudformation stacksets deploys the cloudformation template in all accounts defined in OU.
+- This folder contains a Terraform module which deploys CloudFormation stacksets.
+- CloudFormation stacksets deploys the CloudFormation template in all accounts defined in OU.
 
 ### terraform-single-acc-register
-- This folder is a terraform module which is alternative for single aws account registration via cloudformation.
-- Clients who wants to manage all resource via terraform can use this module.
+- This folder is a terraform module which is alternative for single AWS account registration via CloudFormation.
+- Clients who wants to manage all resource via Terraform can use this module.
