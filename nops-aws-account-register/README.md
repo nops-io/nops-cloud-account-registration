@@ -1,6 +1,8 @@
 # Nops Account Registration Automation
 - Descriptions of the files and folders are as follows:
 
+## Prerequisite
+- AWS Region must be "us-east-1" N.virginia for IaaC deployment.
 ### cloudformation-single-acc-register
 - This folder contains CloudFormation template to register a single AWS account with nOps
   
