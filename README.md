@@ -1,5 +1,5 @@
 # NOPS Cloud Account Registration
-Register your cloud accounts to NOPS and create required resources via IaaC.
+Register your cloud accounts to nOps. This project contains a set of tools and example code to configure IAM permissions and register your accounts with the nOps application using IaaC code. You can register single accounts or manage many accounts using the AWS Organization heirarchy. 
 
 ## Table of contents
 - [Overview](#overview)
