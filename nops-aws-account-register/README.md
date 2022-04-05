@@ -3,10 +3,13 @@
 - Descriptions of the files and folders are as follows:
 
 ## Prerequisite
-**Note:** For IaaC deployment **AWS Region** must be ""**us-east-1**" (N. Virginia) for _all users_.
+ * For IaaC deployment **AWS Region** must be ""**us-east-1**" (N. Virginia) for _all users_.
+ * In order to use the nOps API, you must register an API client and optionally a signature encryption key. See more detail in nOps developer documentation:
+
+     https://docs.nops.io/en/articles/5955764-getting-started-with-the-nops-developer-api
 
 
-Following is the list of folders and a description of the items they contain:
+## Following is the list of folders and a description of the items they contain:
 
 ### cloudformation-single-acc-register
 This folder contains CloudFormation template to register a single AWS account with nOps
