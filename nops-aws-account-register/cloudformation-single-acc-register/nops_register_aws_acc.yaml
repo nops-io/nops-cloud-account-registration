@@ -1,41 +1,41 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: "cloudformation template to register aws account to NOPS"
+Description: "cloudformation template to register AWS account to nOps"
 
 Parameters: 
   ReportName:
     Type: String
     Default: nopsbilling-daily-gzip
-    Description: Nops daily generated report name.
+    Description: nOps daily generated report name.
 
   s3prefix:
     Type: String
     Default: something
-    Description: Nops daily generated reports folder prefix.
+    Description: nOps daily generated reports folder prefix.
 
   BucketName:
     Type: String
     Default: nopsbucketforlogs
-    Description: s3 bucket name for nops daily reports.
+    Description: s3 bucket name for nOps daily reports.
   
   ExternalId:
     Type: String
     NoEcho: true
-    Description: External id required for cross account access role for nops.
+    Description: External id required for cross account access role for nOps.
 
   NopsApiKey:
     Type: String
     NoEcho: true
-    Description: Nops api key to register aws accounts.
+    Description: nOps api key to register AWS accounts.
 
   AccNameToRegister:
     Type: String
-    Description: Account name to register in nops.
+    Description: Account name to register in nOps.
 
   NopsPrivateKey:
     Type: String
     NoEcho: true
     Default: ''
-    Description: Nops private key to generate signature for api request, it should be single line string (optional).
+    Description: nOps private key to generate signature for api request, it should be single line string (optional).
 
 Resources:
   nopsBucketForLogs:

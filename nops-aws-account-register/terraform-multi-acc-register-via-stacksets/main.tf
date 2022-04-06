@@ -30,7 +30,6 @@ resource "aws_cloudformation_stack_set" "nops-account-register" {
 }
 
 resource "aws_cloudformation_stack_set_instance" "ou_instances" {
-  count = var.list_of_OU_ids == null ? 0 : 1 
   deployment_targets {
     organizational_unit_ids = toset(var.list_of_OU_ids)
   }

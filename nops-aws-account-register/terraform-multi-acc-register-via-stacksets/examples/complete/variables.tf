@@ -6,19 +6,16 @@ variable "tags" {
 
 variable "ReportName" {
   type        = string
-  default     = "nopsbilling-daily-gzip"
   description = "nOps daily generated report name"
 }
 
 variable "s3prefix" {
   type        = string
-  default     = "something"
   description = "nOps daily generated reports folder prefix"
 }
 
 variable "BucketName" {
   type        = string
-  default     = "nopsbucketforlogs"
   description = "s3 bucket name for nOps daily reports"
 }
 
@@ -31,17 +28,21 @@ variable "ExternalId" {
 variable "NopsApiKey" {
   type        = string
   sensitive   = true
-  description = "nOps api key to register AWS accounts"
+  description = "nOps api key to register aws accounts"
 }
 
 variable "NopsPrivateKey" {
   type        = string
   sensitive   = true
-  default     = ""
-  description = "nOps private key to generate signature for api request, it should be single line string (optional)."
+  description = "nOps private key to generate signature for api request, It must be single line string (optional)."
 }
 
 variable "AccNameToRegister" {
   type        = string
   description = "Account name to register in nOps."
+}
+
+variable "list_of_OU_ids" {
+  type        = list(string)
+  description = "list of organisation unit ids to deploy stacks."
 }

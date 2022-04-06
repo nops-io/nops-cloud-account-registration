@@ -3,7 +3,7 @@ Register your cloud accounts with nOps. This project contains a set of tools and
 
 ## Table of contents
 - [Overview](#overview)
-- [Aws Account Register](nops-aws-account-register/README.md)
+- [AWS Account Register](nops-aws-account-register/README.md)
 
 
 ## Overview
