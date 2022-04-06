@@ -41,8 +41,8 @@ This Terraform module creates CloudFormation stacksets and creates resources req
 | <a name="input_AccNameToRegister"></a> [AccNameToRegister](#input\_AccNameToRegister) | This Account name is registered in nOps. | `string` | n/a &nbsp;| yes |
 | <a name="input_BucketName"></a> [BucketName](#input\_BucketName) | S3 bucket name for nOps daily reports | `string` | `"nopsbucketforlogs"` | no |
 | <a name="input_ExternalId"></a> [ExternalId](#input\_ExternalId) | External id required to enable cross account access role for nOps | `string` | n/a | yes |
-| <a name="input_NopsApiKey"></a> [NopsApiKey](#input\_NopsApiKey) | nOps API key to register AWS accounts | `string` | n/a | yes |
-| <a name="input_NopsPrivateKey"></a> [NopsPrivateKey](#input\_NopsPrivateKey) | nOps private key to generate a signature for the API request (optional). If used, this should be a single line string that is 'escaped' eg. \\\n instead of \n | `string` | `""` | no |
+| <a name="input_nOpsApiKey"></a> [nOpsApiKey](#input\_nOpsApiKey) | nOps API key to register AWS accounts | `string` | n/a | yes |
+| <a name="input_nOpsPrivateKey"></a> [nOpsPrivateKey](#input\_nOpsPrivateKey) | nOps private key to generate a signature for the API request (optional). If used, this should be a single line string that is 'escaped' eg. \\\n instead of \n | `string` | `""` | no |
 | <a name="input_ReportName"></a> [ReportName](#input\_ReportName) | Name for the report generated daily by nOps | `string` | `"nopsbilling-daily-gzip"` | no |
 | <a name="input_list_of_OU_ids"></a> [list\_of\_OU\_ids](#input\_list\_of\_OU\_ids) | List of organization unit IDs to deploy stacks. | `list(string)` | n/a | yes |
 | <a name="input_s3prefix"></a> [s3prefix](#input\_s3prefix) | nOps daily generated reports folder prefix | `string` | `"something"` | no |
