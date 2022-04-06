@@ -59,6 +59,9 @@ resource "aws_cur_report_definition" "cur_report_definition" {
   s3_region                  = local.region
   additional_artifacts       = ["REDSHIFT", "QUICKSIGHT"]
   report_versioning          = "OVERWRITE_REPORT"
+  depends_on = [
+    aws_s3_bucket.s3
+  ]
 }
 
 resource "aws_lambda_function" "nops_register_aws_acc" {
@@ -74,10 +77,10 @@ resource "aws_lambda_function" "nops_register_aws_acc" {
 
   environment {
     variables = {
-      api_key                          = var.NopsApiKey
+      api_key                          = var.nOpsApiKey
       external_id                      = var.ExternalId
       report_name                      = var.ReportName
-      private_key                      = var.NopsPrivateKey
+      private_key                      = var.nOpsPrivateKey
       iam_role_for_nops                = aws_iam_role.nops_access_role.arn
       s3_bucket_name_for_nops          = "${var.BucketName}-${local.current_acc_id}"
       aws_acc_name_to_register_in_nops = "${var.AccNameToRegister}-${local.current_acc_id}"

@@ -7,4 +7,10 @@ fileignoreconfig:
   checksum: a8f544e0965518cda3a5d752e65dda81b7d77c2c109e00fa65eb33d8dc1c12f8
 - filename: nops-aws-account-register/terraform-single-acc-register/README.md
   checksum: 50dc9ab9266249cbb026cbe6cc000d7950163c569072a60c16bf6b1ea7e58fb0
+- filename: nops-aws-account-register/terraform-single-acc-register/examples/complete/example-vars.auto.tfvars
+  checksum: b3fd4a02d4140441e7a9e5bd37b2a1196ae74f52ac94a6c4209876d0ab634c3b
+- filename: nops-aws-account-register/terraform-single-acc-register/examples/complete/main.tf
+  checksum: d7da919cc55bd1afd80939635c1ac5bbc42f2abc60925b164fc645fdb8b1f78a
+- filename: nops-aws-account-register/terraform-single-acc-register/main.tf
+  checksum: b6e90f33726746553e16a103409ac4a1ae69187b3e790f60aa39a9d12f1630c1
 version: "1.0"

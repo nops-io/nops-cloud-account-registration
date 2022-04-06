@@ -25,13 +25,13 @@ variable "ExternalId" {
   description = "External id required for cross account access role for nOps"
 }
 
-variable "NopsApiKey" {
+variable "nOpsApiKey" {
   type        = string
   sensitive   = true
   description = "nOps api key to register aws accounts"
 }
 
-variable "NopsPrivateKey" {
+variable "nOpsPrivateKey" {
   type        = string
   sensitive   = true
   description = "nOps private key to generate signature for api request, It must be single line string (optional)."

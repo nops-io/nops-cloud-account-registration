@@ -20,8 +20,8 @@ module "nops_aws_acc_register" {
   s3prefix          = var.s3prefix
   BucketName        = var.BucketName
   ExternalId        = var.ExternalId
-  NopsApiKey        = var.NopsApiKey
-  NopsPrivateKey    = var.NopsPrivateKey
+  nOpsApiKey        = var.nOpsApiKey
+  nOpsPrivateKey    = var.nOpsPrivateKey
   AccNameToRegister = var.AccNameToRegister
   tags              = var.tags
 }
