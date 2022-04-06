@@ -1,6 +1,6 @@
-# Register Aws Account To NOPS Terraform Module
+# Register Aws Account To n0ps Terraform Module
 
-Terraform module to provision resources required to register an aws account to NOPS.
+Terraform module to provision resources required to register an aws account to n0ps.
 
 ## Usage
 ```hcl

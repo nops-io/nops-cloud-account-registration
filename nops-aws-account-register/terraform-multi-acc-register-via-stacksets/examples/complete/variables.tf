@@ -6,19 +6,16 @@ variable "tags" {
 
 variable "ReportName" {
   type        = string
-  default     = "nopsbilling-daily-gzip"
   description = "Nops daily generated report name"
 }
 
 variable "s3prefix" {
   type        = string
-  default     = "something"
   description = "Nops daily generated reports folder prefix"
 }
 
 variable "BucketName" {
   type        = string
-  default     = "nopsbucketforlogs"
   description = "s3 bucket name for nops daily reports"
 }
 
@@ -37,19 +34,12 @@ variable "NopsApiKey" {
 variable "NopsPrivateKey" {
   type        = string
   sensitive   = true
-  default     = ""
-  description = "Nops private key to generate signature for api request, it should be single line string (optional)."
+  description = "Nops private key to generate signature for api request, It must be single line string (optional)."
 }
 
 variable "AccNameToRegister" {
   type        = string
   description = "Account name to register in nops."
-}
-
-variable "template_url" {
-  type        = string
-  default     = "https://nops-register-aws-account-us-east-1.s3.amazonaws.com/nops_register_aws_acc.yaml"
-  description = "cloudformation template url."
 }
 
 variable "list_of_OU_ids" {
