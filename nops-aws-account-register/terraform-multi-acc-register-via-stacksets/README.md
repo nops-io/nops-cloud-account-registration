@@ -1,4 +1,4 @@
-# Register Aws Accounts in OUs To n0ps Terraform Module
+# Register AWS Accounts in OUs To n0ps Terraform Module
 
 This Terraform module creates CloudFormation stacksets and creates resources required to register AWS accounts to nOps using provided Organization Unit IDs.
 
@@ -37,8 +37,8 @@ This Terraform module creates CloudFormation stacksets and creates resources req
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|:----------------------------|---------|---------|:--------:|
-| <a name="input_AccNameToRegister"></a> [AccNameToRegister](#input\_AccNameToRegister) | This Account name is registered in nOps. | `string` | n/a | yes |
+|------|:----------------------------|---------|------|:--------:|
+| <a name="input_AccNameToRegister"></a> [AccNameToRegister](#input\_AccNameToRegister) | This Account name is registered in nOps. | `string` | n/a &nbsp;| yes |
 | <a name="input_BucketName"></a> [BucketName](#input\_BucketName) | S3 bucket name for nOps daily reports | `string` | `"nopsbucketforlogs"` | no |
 | <a name="input_ExternalId"></a> [ExternalId](#input\_ExternalId) | External id required to enable cross account access role for nOps | `string` | n/a | yes |
 | <a name="input_NopsApiKey"></a> [NopsApiKey](#input\_NopsApiKey) | nOps API key to register AWS accounts | `string` | n/a | yes |

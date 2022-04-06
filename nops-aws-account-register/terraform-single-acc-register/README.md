@@ -1,6 +1,6 @@
-# Register Aws Account To n0ps Terraform Module
+# Register AWS Account To nOps Terraform Module
 
-Terraform module to provision resources required to register an aws account to n0ps.
+Terraform module to provision resources required to register an AWS account to nOps.
 
 ## Usage
 ```hcl
@@ -49,7 +49,7 @@ Terraform module to provision resources required to register an aws account to n
 | <a name="input_AccNameToRegister"></a> [AccNameToRegister](#input\_AccNameToRegister) | Account name to register in nOps. | `string` | n/a | yes |
 | <a name="input_BucketName"></a> [BucketName](#input\_BucketName) | s3 bucket name for nOps daily reports | `string` | `"nopsbucketforlogs"` | no |
 | <a name="input_ExternalId"></a> [ExternalId](#input\_ExternalId) | External id required for cross account access role for nOps | `string` | n/a | yes |
-| <a name="input_NopsApiKey"></a> [NopsApiKey](#input\_NopsApiKey) | nOps api key to register aws accounts | `string` | n/a | yes |
+| <a name="input_NopsApiKey"></a> [NopsApiKey](#input\_NopsApiKey) | nOps api key to register AWS accounts | `string` | n/a | yes |
 | <a name="input_NopsPrivateKey"></a> [NopsPrivateKey](#input\_NopsPrivateKey) | nOps private key to generate signature for api request. This should be single line string (optional). | `string` | `""` | no |
 | <a name="input_ReportName"></a> [ReportName](#input\_ReportName) | nOps daily generated report name | `string` | `"nopsbilling-daily-gzip"` | no |
 | <a name="input_s3prefix"></a> [s3prefix](#input\_s3prefix) | nOps daily generated reports folder prefix | `string` | `"something"` | no |
