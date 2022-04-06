@@ -6,40 +6,40 @@ variable "tags" {
 
 variable "ReportName" {
   type        = string
-  description = "Nops daily generated report name"
+  description = "nOps daily generated report name"
 }
 
 variable "s3prefix" {
   type        = string
-  description = "Nops daily generated reports folder prefix"
+  description = "nOps daily generated reports folder prefix"
 }
 
 variable "BucketName" {
   type        = string
-  description = "s3 bucket name for nops daily reports"
+  description = "s3 bucket name for nOps daily reports"
 }
 
 variable "ExternalId" {
   type        = string
   sensitive   = true
-  description = "External id required for cross account access role for nops"
+  description = "External id required for cross account access role for nOps"
 }
 
 variable "NopsApiKey" {
   type        = string
   sensitive   = true
-  description = "Nops api key to register aws accounts"
+  description = "nOps api key to register aws accounts"
 }
 
 variable "NopsPrivateKey" {
   type        = string
   sensitive   = true
-  description = "Nops private key to generate signature for api request, It must be single line string (optional)."
+  description = "nOps private key to generate signature for api request, It must be single line string (optional)."
 }
 
 variable "AccNameToRegister" {
   type        = string
-  description = "Account name to register in nops."
+  description = "Account name to register in nOps."
 }
 
 variable "list_of_OU_ids" {
