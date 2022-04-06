@@ -18,8 +18,8 @@ resource "aws_cloudformation_stack_set" "nops-account-register" {
     s3prefix          = var.s3prefix
     BucketName        = var.BucketName
     ExternalId        = var.ExternalId
-    NopsApiKey        = var.NopsApiKey
-    NopsPrivateKey    = var.NopsPrivateKey
+    nOpsApiKey        = var.nOpsApiKey
+    nOpsPrivateKey    = var.nOpsPrivateKey
     AccNameToRegister = var.AccNameToRegister
   }
   capabilities = [

@@ -22,7 +22,7 @@ Parameters:
     NoEcho: true
     Description: External id required for cross account access role for nOps.
 
-  NopsApiKey:
+  nOpsApiKey:
     Type: String
     NoEcho: true
     Description: nOps api key to register AWS accounts.
@@ -31,7 +31,7 @@ Parameters:
     Type: String
     Description: Account name to register in nOps.
 
-  NopsPrivateKey:
+  nOpsPrivateKey:
     Type: String
     NoEcho: true
     Default: ''
@@ -265,10 +265,10 @@ Resources:
       FunctionName: "nops-register-aws-account"
       Environment:
         Variables:
-          api_key: !Ref NopsApiKey
+          api_key: !Ref nOpsApiKey
           external_id: !Ref ExternalId
           report_name: !Ref ReportName
-          private_key: !Ref NopsPrivateKey
+          private_key: !Ref nOpsPrivateKey
           iam_role_for_nops: !GetAtt nopsAccessIamRole.Arn
           s3_bucket_name_for_nops: !Sub '${BucketName}-${AWS::AccountId}'
           aws_acc_name_to_register_in_nops: !Sub '${AccNameToRegister}-${AWS::AccountId}'
