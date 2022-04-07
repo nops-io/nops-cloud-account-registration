@@ -12,7 +12,7 @@
 ## Following is the list of folders and a description of the items they contain:
 
 ### cloudformation-single-acc-register
-This folder contains CloudFormation template to register a single AWS account with nOps
+This folder contains CloudFormation template to register a single AWS account with nOps.
 
 ### lambda_functions
 This folder contains the python code for the lambda function which registers AWS accounts to nOps.
