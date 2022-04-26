@@ -10,7 +10,7 @@ fileignoreconfig:
 - filename: nops-aws-account-register/terraform-multi-acc-register-via-stacksets/main.tf
   checksum: 6dc3a3fe4274f34e351416461c8f0a0e3354226520d6c7419fa381aabd2dd91b
 - filename: nops-aws-account-register/terraform-single-acc-register/README.md
-  checksum: 588e35bb0ace16cc618508544f383dcc167fb8248eb5364fcfeedd49c6ee698a
+  checksum: c0566b6aff8e180dfc43a2fb8c7b699c0d4fa5b9190d73f876bdd1222186188c
 - filename: nops-aws-account-register/terraform-single-acc-register/examples/complete/example-vars.auto.tfvars
   checksum: b3fd4a02d4140441e7a9e5bd37b2a1196ae74f52ac94a6c4209876d0ab634c3b
 - filename: nops-aws-account-register/terraform-single-acc-register/examples/complete/main.tf
