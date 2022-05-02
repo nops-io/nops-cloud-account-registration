@@ -1,0 +1,213 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "cloudformation template to register AWS account to nOps"
+
+Parameters: 
+  ReportName:
+    Type: String
+    Default: nopsbilling-daily-gzip
+    Description: nOps daily generated report name.
+
+  BucketName:
+    Type: String
+    Description: s3 bucket name for nOps daily reports.
+  
+  ExternalId:
+    Type: String
+    NoEcho: true
+    Description: External id required for cross account access role for nOps.
+
+  nOpsApiKey:
+    Type: String
+    NoEcho: true
+    Description: nOps api key to register AWS accounts.
+
+  AccNameToRegister:
+    Type: String
+    Description: Account name to register in nOps.
+
+  nOpsPrivateKey:
+    Type: String
+    NoEcho: true
+    Default: ''
+    Description: nOps private key to generate signature for api request, it should be single line string (optional).
+
+Resources:
+  nopsAccessIamRole: 
+    Type: "AWS::IAM::Role"
+    Properties: 
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - Effect: "Allow"
+            Principal: 
+              AWS: "202279780353"
+            Action: 
+              - "sts:AssumeRole"
+            Condition:
+              StringEquals:
+                  sts:ExternalId: !Ref ExternalId 
+      Path: "/"
+      Policies: 
+        - PolicyName: "InlinePolicy"
+          PolicyDocument: 
+            Version: "2012-10-17"
+            Statement: 
+              - Effect: "Allow"
+                Action: 
+                  - "autoscaling:DescribeAutoScalingGroups"
+                  - "ce:GetCostAndUsage"
+                  -  "ce:GetReservationPurchaseRecommendation"
+                  -  "ce:GetRightsizingRecommendation"
+                  -  "ce:GetSavingsPlansPurchaseRecommendation"
+                  -  "cloudformation:DescribeStackResources"
+                  -  "cloudformation:DescribeStacks"
+                  -  "cloudformation:GetTemplate"
+                  -  "cloudfront:ListDistributions"
+                  -  "cloudtrail:DescribeTrails"
+                  -  "cloudtrail:GetTrailStatus"
+                  -  "cloudtrail:LookupEvents"
+                  -  "cloudwatch:DescribeAlarms"
+                  -  "cloudwatch:GetMetricStatistics"
+                  -  "cloudwatch:ListMetrics"
+                  -  "config:DescribeConfigurationRecorderStatus"
+                  -  "config:DescribeConfigurationRecorders"
+                  -  "config:DescribeDeliveryChannelStatus"
+                  -  "config:DescribeDeliveryChannels"
+                  -  "cur:DescribeReportDefinitions"
+                  -  "cur:PutReportDefinition"
+                  -  "dynamodb:DescribeContinuousBackups"
+                  -  "dynamodb:DescribeTable"
+                  -  "dynamodb:ListTables"
+                  -  "ec2:DescribeAddresses"
+                  -  "ec2:DescribeClientVpnConnections"
+                  -  "ec2:DescribeImages"
+                  -  "ec2:DescribeInstanceAttribute"
+                  -  "ec2:DescribeInstanceStatus"
+                  -  "ec2:DescribeInstances"
+                  -  "ec2:DescribeFlowLogs"
+                  -  "ec2:DescribeNatGateways"
+                  -  "ec2:DescribeNetworkInterfaces"
+                  -  "ec2:DescribeReservedInstancesOfferings"
+                  -  "ec2:DescribeRouteTables"
+                  -  "ec2:DescribeSecurityGroups"
+                  -  "ec2:DescribeSnapshots"
+                  -  "ec2:DescribeSubnets"
+                  -  "ec2:DescribeVolumes"
+                  -  "ec2:DescribeVpcs"
+                  -  "ecs:DescribeClusters"
+                  -  "ecs:ListClusters"
+                  -  "eks:ListClusters"
+                  -  "elasticache:DescribeCacheClusters"
+                  -  "elasticache:DescribeCacheSubnetGroups"
+                  -  "elasticache:DescribeReplicationGroups"
+                  -  "elasticfilesystem:DescribeFileSystems"
+                  -  "elasticloadbalancing:DescribeLoadBalancers"
+                  -  "elb:DescribeLoadBalancers"
+                  -  "es:DescribeElasticsearchDomains"
+                  -  "guardduty:ListDetectors"
+                  -  "iam:GetAccessKeyLastUsed"
+                  -  "iam:GetAccountPasswordPolicy"
+                  -  "iam:GetAccountSummary"
+                  -  "iam:GetLoginProfile"
+                  -  "iam:GetRole"
+                  -  "iam:ListAccessKeys"
+                  -  "iam:ListAccountAliases"
+                  -  "iam:ListAttachedGroupPolicies"
+                  -  "iam:ListAttachedUserPolicies"
+                  -  "iam:ListGroupsForUser"
+                  -  "iam:ListMFADevices"
+                  -  "iam:ListRoles"
+                  -  "iam:ListUserPolicies"
+                  -  "iam:ListUsers"
+                  -  "inspector:ListAssessmentRuns"
+                  -  "kms:ListKeys"
+                  -  "lambda:GetFunction"
+                  -  "lambda:GetPolicy"
+                  -  "lambda:ListFunctions"
+                  -  "rds:DescribeDBInstances"
+                  -  "rds:DescribeDBSnapshots"
+                  -  "rds:DescribePendingMaintenanceActions"
+                  -  "rds:ListTagsForResource"
+                  -  "redshift:DescribeClusters"
+                  -  "s3:GetBucketAcl"
+                  -  "s3:GetBucketLogging"
+                  -  "s3:GetBucketPolicy"
+                  -  "s3:GetBucketPolicyStatus"
+                  -  "s3:GetBucketPublicAccessBlock"
+                  -  "s3:GetBucketVersioning"
+                  -  "s3:GetEncryptionConfiguration"
+                  -  "s3:ListAllMyBuckets"
+                  -  "ssm:ListComplianceSummaries"
+                  -  "support:DescribeCases"
+                  -  "support:DescribeTrustedAdvisorCheckRefreshStatuses"
+                  -  "support:DescribeTrustedAdvisorCheckResult"
+                  -  "support:DescribeTrustedAdvisorChecks"
+                  -  "tag:getResources"
+                  -  "tag:getTagKeys"
+                  -  "tag:getTagValues"
+                  -  "wellarchitected:*"
+                  -  "workspaces:DescribeWorkspaceDirectories"
+                  -  "workspaces:DescribeWorkspaces"
+                Resource: !Sub 'arn:aws:s3:::${BucketName}/*'
+
+  nopsLambdaExecutionRole: 
+    Type: "AWS::IAM::Role"
+    Properties: 
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - Effect: "Allow"
+            Principal: 
+              Service: "lambda.amazonaws.com"
+            Action: 
+              - "sts:AssumeRole"
+      Path: "/"
+      Policies: 
+        - PolicyName: "InlinePolicy"
+          PolicyDocument: 
+            Version: "2012-10-17"
+            Statement: 
+              - Effect: "Allow"
+                Action: 
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Resource: "*"
+
+  LambdaRegisterAwsAcc:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      Code:
+        S3Bucket: !Join [ "", [ "nops-register-aws-account-", !Ref AWS::Region ] ]
+        S3Key: "nops_register_aws_acc.zip"
+      PackageType: Zip
+      Handler: "nops_register_aws_acc.cloudformation_handler"
+      Role: !GetAtt nopsLambdaExecutionRole.Arn
+      Runtime: "python3.8"
+      Timeout: 150
+      FunctionName: "nops-register-aws-account"
+      Environment:
+        Variables:
+          api_key: !Ref nOpsApiKey
+          external_id: !Ref ExternalId
+          report_name: !Ref ReportName
+          private_key: !Ref nOpsPrivateKey
+          iam_role_for_nops: !GetAtt nopsAccessIamRole.Arn
+          s3_bucket_name_for_nops: !Ref BucketName
+          aws_acc_name_to_register_in_nops: !Sub '${AccNameToRegister}-${AWS::AccountId}'
+    DependsOn: 
+      - nopsLambdaExecutionRole
+      - nopsAccessIamRole
+
+  PermissionLambdaRegisterAwsAcc:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      Action: 'lambda:InvokeFunction'
+      FunctionName: !GetAtt [ LambdaRegisterAwsAcc, Arn ]
+      Principal: 'cloudformation.amazonaws.com'
+      SourceAccount: !Ref "AWS::AccountId"
+
+  TriggerLambdaRegisterAwsAcc:
+    Type: Custom::TriggerLambdaRegisterAwsAcc
+    Properties:
+      ServiceToken : !GetAtt [ LambdaRegisterAwsAcc, Arn ]

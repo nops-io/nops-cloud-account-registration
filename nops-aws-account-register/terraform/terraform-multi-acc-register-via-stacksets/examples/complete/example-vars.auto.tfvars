@@ -13,3 +13,5 @@ nOpsPrivateKey = "-----BEGIN PRIVATE KEY-----\\nMIICdgIBADANBgkqhkiG9w0BAQEFAASC
 AccNameToRegister = "nOps"
 
 list_of_OU_ids = ["ou-abcdefgh", "ou-ijklmn"]
+
+master_payer_acc_id = "98123576903"
