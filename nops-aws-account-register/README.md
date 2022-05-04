@@ -14,6 +14,9 @@
 ### cloudformation-single-acc-register
 This folder contains CloudFormation template to register a single AWS account with nOps.
 
+### cloudformation-org-accounts-register
+This folder contains CloudFormation template to register AWS accounts with consolidated billing and organisation to nOps.
+
 ### lambda_functions
 This folder contains the python code for the lambda function which registers AWS accounts to nOps.
 

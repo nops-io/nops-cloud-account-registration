@@ -2,7 +2,7 @@ ReportName = "nOpsbilling-daily-gzip"
 
 s3prefix = "nOpsbilling"
 
-BucketName = "nOpsbucketforlogs"
+BucketName = "nopsbucketforlogs"
 
 ExternalId = "98123576903"
 
@@ -13,5 +13,7 @@ nOpsPrivateKey = "-----BEGIN PRIVATE KEY-----\\nMIICdgIBADANBgkqhkiG9w0BAQEFAASC
 AccNameToRegister = "nOps"
 
 list_of_OU_ids = ["ou-abcdefgh", "ou-ijklmn"]
+
+org_root_id = ["r-123b"]
 
 master_payer_acc_id = "98123576903"

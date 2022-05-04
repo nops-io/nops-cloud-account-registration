@@ -24,6 +24,7 @@ module "nops_aws_acc_register" {
   nOpsPrivateKey      = var.nOpsPrivateKey
   AccNameToRegister   = var.AccNameToRegister
   list_of_OU_ids      = var.list_of_OU_ids
+  org_root_id         = var.org_root_id
   master_payer_acc_id = var.master_payer_acc_id
   tags                = var.tags
 }

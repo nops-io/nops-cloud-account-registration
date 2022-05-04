@@ -5,14 +5,11 @@ locals {
 }
 
 resource "aws_cloudformation_stack_set" "master_payer_consolidated_nops_account_register" {
-  name             = "master-payer-consolidated-${local.identifier}"
-  template_url     = var.master_payer_acc_template_url
-  permission_model = "SERVICE_MANAGED"
-  auto_deployment {
-    enabled                          = true
-    retain_stacks_on_account_removal = false
-  }
-
+  name                    = "master-payer-consolidated-${local.identifier}"
+  template_url            = var.master_payer_acc_template_url
+  permission_model        = "SELF_MANAGED"
+  administration_role_arn = aws_iam_role.AWSCloudFormationStackSetAdministrationRole.arn
+  execution_role_name     = "AWSCloudFormationStackSetExecutionRole-nOps"
 
   parameters = {
     ReportName = var.ReportName
@@ -24,6 +21,10 @@ resource "aws_cloudformation_stack_set" "master_payer_consolidated_nops_account_
     "CAPABILITY_NAMED_IAM"
   ]
   tags = var.tags
+  depends_on = [
+    aws_iam_role.AWSCloudFormationStackSetAdministrationRole,
+    aws_cloudformation_stack_set_instance.execution_role_creation
+  ]
 }
 
 resource "aws_cloudformation_stack_set_instance" "master_payer_consolidated_ou_instances" {
