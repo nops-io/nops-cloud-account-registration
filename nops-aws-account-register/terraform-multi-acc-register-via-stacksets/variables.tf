@@ -60,15 +60,15 @@ variable "child_acc_template_url" {
 
 variable "list_of_OU_ids" {
   type        = list(string)
-  description = "list of organisation unit ids to deploy stacks on child AWS accounts."
+  description = "list of Organization unit ids to deploy stacks on child AWS accounts."
 }
 
 variable "org_root_id" {
   type        = list(string)
-  description = "AWS Organisation root id."
+  description = "AWS Organization root id."
 }
 
 variable "master_payer_acc_id" {
   type        = string
-  description = "AWS org Consolidted billing master payer account id."
+  description = "AWS org Consolidated billing master payer account id."
 }

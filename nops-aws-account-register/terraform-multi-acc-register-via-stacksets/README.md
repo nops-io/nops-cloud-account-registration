@@ -52,12 +52,12 @@ This Terraform module creates CloudFormation stacksets and creates resources req
 | <a name="input_ExternalId"></a> [ExternalId](#input\_ExternalId) | External id required for cross account access role for nOps | `string` | n/a | yes |
 | <a name="input_ReportName"></a> [ReportName](#input\_ReportName) | nOps daily generated report name | `string` | `"nopsbilling-daily-gzip"` | no |
 | <a name="input_child_acc_template_url"></a> [child\_acc\_template\_url](#input\_child\_acc\_template\_url) | CloudFormation template url for child accounts. | `string` | `"https://nops-register-aws-account-us-east-1.s3.amazonaws.com/child_consolidated_aws_acc_nops_register.yaml"` | no |
-| <a name="input_list_of_OU_ids"></a> [list\_of\_OU\_ids](#input\_list\_of\_OU\_ids) | list of organisation unit ids to deploy stacks on child AWS accounts. | `list(string)` | n/a | yes |
+| <a name="input_list_of_OU_ids"></a> [list\_of\_OU\_ids](#input\_list\_of\_OU\_ids) | list of Organization unit ids to deploy stacks on child AWS accounts. | `list(string)` | n/a | yes |
 | <a name="input_master_payer_acc_id"></a> [master\_payer\_acc\_id](#input\_master\_payer\_acc\_id) | AWS org Consolidted billing master payer account id. | `string` | n/a | yes |
 | <a name="input_master_payer_acc_template_url"></a> [master\_payer\_acc\_template\_url](#input\_master\_payer\_acc\_template\_url) | CloudFormation template url for consolidated billing master payer AWS account. | `string` | `"https://nops-register-aws-account-us-east-1.s3.amazonaws.com/master_payer_consolidated_aws_acc_nops_register.yaml"` | no |
 | <a name="input_nOpsApiKey"></a> [nOpsApiKey](#input\_nOpsApiKey) | nOps api key to register AWS accounts | `string` | n/a | yes |
 | <a name="input_nOpsPrivateKey"></a> [nOpsPrivateKey](#input\_nOpsPrivateKey) | nOps private key to generate signature for api request, it should be single line string (optional). | `string` | `""` | no |
-| <a name="input_org_root_id"></a> [org\_root\_id](#input\_org\_root\_id) | AWS Organisation root id. | `list(string)` | n/a | yes |
+| <a name="input_org_root_id"></a> [org\_root\_id](#input\_org\_root\_id) | AWS Organization root id. | `list(string)` | n/a | yes |
 | <a name="input_s3prefix"></a> [s3prefix](#input\_s3prefix) | nOps daily generated reports folder prefix | `string` | `"something"` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to be applied to the resource | `map(any)` | `{}` | no |
 

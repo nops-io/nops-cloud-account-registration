@@ -44,15 +44,15 @@ variable "AccNameToRegister" {
 
 variable "list_of_OU_ids" {
   type        = list(string)
-  description = "list of organisation unit ids to deploy stacks."
+  description = "list of Organization unit ids to deploy stacks."
 }
 
 variable "org_root_id" {
   type        = list(string)
-  description = "AWS Organisation root id."
+  description = "AWS Organization root id."
 }
 
 variable "master_payer_acc_id" {
   type        = string
-  description = "AWS org Consolidted billing master payer account id."
+  description = "AWS org Consolidated billing master payer account id."
 }
