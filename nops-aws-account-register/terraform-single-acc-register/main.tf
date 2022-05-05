@@ -84,6 +84,7 @@ resource "aws_lambda_function" "nops_register_aws_acc" {
       iam_role_for_nops                = aws_iam_role.nops_access_role.arn
       s3_bucket_name_for_nops          = "${var.BucketName}-${local.current_acc_id}"
       aws_acc_name_to_register_in_nops = "${var.AccNameToRegister}-${local.current_acc_id}"
+      s3prefix                         = var.s3prefix
     }
   }
   tags = var.tags

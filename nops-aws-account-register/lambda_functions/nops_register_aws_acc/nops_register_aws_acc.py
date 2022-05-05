@@ -30,6 +30,7 @@ def main_function():
     else:
         s3_bucket_name_for_nops = environ.get('s3_bucket_name_for_nops')
         report_name = environ.get('report_name')
+        s3prefix = environ.get('s3prefix')
         data = {
             "access_type": "role",
             "arn": iam_role_for_nops,
@@ -38,9 +39,11 @@ def main_function():
             "name": aws_acc_name_to_register_in_nops,
             "client": client_id,
             "cloud_type":"aws",
-            "report_name": report_name
+            "report_name": report_name,
+            "report_path_prefix": s3prefix
         }
 
+    print(f'payload: {data}')
     if(len(environ.get('private_key')) == 0):
         print("private key not found in variable proceeding without signature")
         response = requests.post(url, json=data)

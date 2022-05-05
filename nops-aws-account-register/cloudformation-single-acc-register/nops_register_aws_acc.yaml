@@ -228,8 +228,8 @@ Resources:
                 Action:
                   - "s3:*"
                 Resource:
-                  - !Sub 'arn:aws:s3:::${BucketName}'
-                  - !Sub 'arn:aws:s3:::${BucketName}/*'
+                  - !Sub 'arn:aws:s3:::${BucketName}-${AWS::AccountId}'
+                  - !Sub 'arn:aws:s3:::${BucketName}-${AWS::AccountId}/*'
 
   nopsLambdaExecutionRole: 
     Type: "AWS::IAM::Role"
@@ -272,6 +272,7 @@ Resources:
           api_key: !Ref nOpsApiKey
           external_id: !Ref ExternalId
           report_name: !Ref ReportName
+          s3prefix: !Ref s3prefix
           private_key: !Ref nOpsPrivateKey
           iam_role_for_nops: !GetAtt nopsAccessIamRole.Arn
           s3_bucket_name_for_nops: !Sub '${BucketName}-${AWS::AccountId}'
