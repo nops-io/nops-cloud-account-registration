@@ -48,24 +48,24 @@ variable "AccNameToRegister" {
 
 variable "master_payer_acc_template_url" {
   type        = string
-  default     = "https://nops-register-aws-account-us-east-1.s3.amazonaws.com/master_payer_consolidated_aws_acc_nops_register.yaml"
+  default     = "https://nops-register-aws-account-us-east-1.s3.amazonaws.com/nops_register_aws_acc.yaml"
   description = "CloudFormation template url for consolidated billing master payer AWS account."
 }
 
-variable "child_acc_template_url" {
+variable "member_acc_template_url" {
   type        = string
-  default     = "https://nops-register-aws-account-us-east-1.s3.amazonaws.com/child_consolidated_aws_acc_nops_register.yaml"
-  description = "CloudFormation template url for child accounts."
+  default     = "https://nops-register-aws-account-us-east-1.s3.amazonaws.com/member_consolidated_aws_acc_nops_register.yaml"
+  description = "CloudFormation template url for member accounts."
 }
 
 variable "list_of_OU_ids" {
   type        = list(string)
-  description = "list of Organization unit ids to deploy stacks on child AWS accounts."
+  description = "list of Organization unit ids to deploy stacks on member AWS accounts."
 }
 
 variable "org_root_id" {
   type        = list(string)
-  description = "AWS Organization root id."
+  description = "AWS Organization root id for CloudFormation stackset execution role."
 }
 
 variable "master_payer_acc_id" {

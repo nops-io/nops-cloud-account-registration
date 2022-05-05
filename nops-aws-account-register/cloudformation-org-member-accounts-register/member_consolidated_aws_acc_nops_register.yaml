@@ -2,15 +2,6 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: "cloudformation template to register AWS account to nOps"
 
 Parameters: 
-  ReportName:
-    Type: String
-    Default: nopsbilling-daily-gzip
-    Description: nOps daily generated report name.
-
-  BucketName:
-    Type: String
-    Description: s3 bucket name for nOps daily reports.
-  
   ExternalId:
     Type: String
     NoEcho: true
@@ -148,7 +139,7 @@ Resources:
                   -  "wellarchitected:*"
                   -  "workspaces:DescribeWorkspaceDirectories"
                   -  "workspaces:DescribeWorkspaces"
-                Resource: !Sub 'arn:aws:s3:::${BucketName}/*'
+                Resource: '*'
 
   nopsLambdaExecutionRole: 
     Type: "AWS::IAM::Role"
@@ -190,11 +181,10 @@ Resources:
         Variables:
           api_key: !Ref nOpsApiKey
           external_id: !Ref ExternalId
-          report_name: !Ref ReportName
           private_key: !Ref nOpsPrivateKey
           iam_role_for_nops: !GetAtt nopsAccessIamRole.Arn
-          s3_bucket_name_for_nops: !Ref BucketName
           aws_acc_name_to_register_in_nops: !Sub '${AccNameToRegister}-${AWS::AccountId}'
+          is_member_acc: "True"
     DependsOn: 
       - nopsLambdaExecutionRole
       - nopsAccessIamRole

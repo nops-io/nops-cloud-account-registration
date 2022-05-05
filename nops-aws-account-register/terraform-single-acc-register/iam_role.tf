@@ -122,11 +122,18 @@ resource "aws_iam_role" "nops_access_role" {
               "workspaces:DescribeWorkspaceDirectories",
               "workspaces:DescribeWorkspaces"
             ],
+            "Resource" : "*"
+            "Effect" : "Allow"
+          },
+          {
+            "Action" : [
+              "s3:*"
+            ],
+            "Effect" : "Allow",
             "Resource" : [
               "arn:aws:s3:::${aws_s3_bucket.s3.arn}",
               "arn:aws:s3:::${aws_s3_bucket.s3.arn}/*"
-            ],
-            "Effect" : "Allow"
+            ]
           }
         ]
       }

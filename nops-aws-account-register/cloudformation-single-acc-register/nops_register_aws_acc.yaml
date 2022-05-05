@@ -223,9 +223,13 @@ Resources:
                   -  "wellarchitected:*"
                   -  "workspaces:DescribeWorkspaceDirectories"
                   -  "workspaces:DescribeWorkspaces"
-                Resource: 
-                  - !GetAtt nopsBucketForLogs.Arn
-                  - !Sub '${nopsBucketForLogs.Arn}/*'
+                Resource: "*"
+              - Effect: "Allow"
+                Action:
+                  - "s3:*"
+                Resource:
+                  - !Sub 'arn:aws:s3:::${BucketName}'
+                  - !Sub 'arn:aws:s3:::${BucketName}/*'
 
   nopsLambdaExecutionRole: 
     Type: "AWS::IAM::Role"
