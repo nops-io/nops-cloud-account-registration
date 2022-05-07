@@ -51,7 +51,6 @@ This Terraform module creates CloudFormation stacksets and creates resources req
 |------|-------------|------|---------|:--------:|
 | <a name="input_AccNameToRegister"></a> [AccNameToRegister](#input\_AccNameToRegister) | Account name to register in nOps. | `string` | n/a | yes |
 | <a name="input_BucketName"></a> [BucketName](#input\_BucketName) | s3 bucket name for nOps daily reports | `string` | `"nopsbucketforlogs"` | no |
-| <a name="input_ExternalId"></a> [ExternalId](#input\_ExternalId) | External id required for cross account access role for nOps | `string` | n/a | yes |
 | <a name="input_ReportName"></a> [ReportName](#input\_ReportName) | nOps daily generated report name | `string` | `"nopsbilling-daily-gzip"` | no |
 | <a name="input_list_of_OU_ids"></a> [list\_of\_OU\_ids](#input\_list\_of\_OU\_ids) | list of Organization unit ids to deploy stacks on member AWS accounts. | `list(string)` | n/a | yes |
 | <a name="input_master_payer_acc_id"></a> [master\_payer\_acc\_id](#input\_master\_payer\_acc\_id) | AWS org Consolidated billing master payer account id. | `string` | n/a | yes |

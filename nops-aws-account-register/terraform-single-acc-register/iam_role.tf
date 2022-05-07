@@ -1,3 +1,9 @@
+resource "random_string" "random" {
+  length           = 30
+  special          = false
+  lower            = false
+}
+
 resource "aws_iam_role" "nops_access_role" {
   name = "nops_access_role"
   assume_role_policy = jsonencode(
@@ -12,7 +18,7 @@ resource "aws_iam_role" "nops_access_role" {
           "Action" : "sts:AssumeRole",
           "Condition" : {
             "StringEquals" : {
-              "sts:ExternalId" : "${var.ExternalId}"
+              "sts:ExternalId" : "${random_string.random.id}"
             }
           }
         }

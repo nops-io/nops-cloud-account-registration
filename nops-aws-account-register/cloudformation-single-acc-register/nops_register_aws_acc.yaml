@@ -16,11 +16,6 @@ Parameters:
     Type: String
     Default: nopsbucketforlogs
     Description: s3 bucket name for nOps daily reports.
-  
-  ExternalId:
-    Type: String
-    NoEcho: true
-    Description: External id required for cross account access role for nOps.
 
   nOpsApiKey:
     Type: String
@@ -82,7 +77,7 @@ Resources:
             Condition:
               StringEquals:
                   aws:SourceArn: !Sub 'arn:aws:cur:${AWS::Region}:${AWS::AccountId}:definition/*'
-                  aws:SourceAccount: !Sub '${AWS::AccountId}'          
+                  aws:SourceAccount: !Sub '${AWS::AccountId}'
 
 
   nopsReportDefinition:
@@ -106,9 +101,66 @@ Resources:
       S3Region: !Sub '${AWS::Region}'
       TimeUnit: "DAILY"
 
+  nopsLambdaExecutionRole: 
+    Type: "AWS::IAM::Role"
+    Properties: 
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - Effect: "Allow"
+            Principal: 
+              Service: "lambda.amazonaws.com"
+            Action: 
+              - "sts:AssumeRole"
+      Path: "/"
+      Policies: 
+        - PolicyName: "InlinePolicy"
+          PolicyDocument: 
+            Version: "2012-10-17"
+            Statement: 
+              - Effect: "Allow"
+                Action: 
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Resource: "*"
+
+  LambdaGenUUID:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      Code:
+        S3Bucket: !Join [ "", [ "nops-register-aws-account-", !Ref AWS::Region ] ]
+        S3Key: "generate_external_id.zip"
+      PackageType: Zip
+      Handler: "generate_external_id.cloudformation_handler"
+      Role: !GetAtt nopsLambdaExecutionRole.Arn
+      Runtime: "python3.8"
+      Timeout: 150
+      FunctionName: "generate-external-id"
+    DependsOn: 
+      - nopsLambdaExecutionRole
+
+  PermissionLambdaGenUUID:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      Action: 'lambda:InvokeFunction'
+      FunctionName: !GetAtt [ LambdaGenUUID, Arn ]
+      Principal: 'cloudformation.amazonaws.com'
+      SourceAccount: !Ref "AWS::AccountId"
+    DependsOn: 
+      - LambdaGenUUID
+
+  TriggerLambdaGenUUID:
+    Type: Custom::TriggerLambdaGenUUID
+    Properties:
+      ServiceToken : !GetAtt [ LambdaGenUUID, Arn ]
+    DependsOn: 
+      - PermissionLambdaGenUUID
 
   nopsAccessIamRole: 
     Type: "AWS::IAM::Role"
+    DependsOn: 
+      - TriggerLambdaGenUUID
     Properties: 
       AssumeRolePolicyDocument: 
         Version: "2012-10-17"
@@ -120,7 +172,7 @@ Resources:
               - "sts:AssumeRole"
             Condition:
               StringEquals:
-                  sts:ExternalId: !Ref ExternalId 
+                  sts:ExternalId: !GetAtt TriggerLambdaGenUUID.external_id
       Path: "/"
       Policies: 
         - PolicyName: "InlinePolicy"
@@ -231,30 +283,6 @@ Resources:
                   - !Sub 'arn:aws:s3:::${BucketName}-${AWS::AccountId}'
                   - !Sub 'arn:aws:s3:::${BucketName}-${AWS::AccountId}/*'
 
-  nopsLambdaExecutionRole: 
-    Type: "AWS::IAM::Role"
-    Properties: 
-      AssumeRolePolicyDocument: 
-        Version: "2012-10-17"
-        Statement: 
-          - Effect: "Allow"
-            Principal: 
-              Service: "lambda.amazonaws.com"
-            Action: 
-              - "sts:AssumeRole"
-      Path: "/"
-      Policies: 
-        - PolicyName: "InlinePolicy"
-          PolicyDocument: 
-            Version: "2012-10-17"
-            Statement: 
-              - Effect: "Allow"
-                Action: 
-                  - "logs:CreateLogGroup"
-                  - "logs:CreateLogStream"
-                  - "logs:PutLogEvents"
-                Resource: "*"
-
   LambdaRegisterAwsAcc:
     Type: "AWS::Lambda::Function"
     Properties:
@@ -270,7 +298,7 @@ Resources:
       Environment:
         Variables:
           api_key: !Ref nOpsApiKey
-          external_id: !Ref ExternalId
+          external_id: !GetAtt TriggerLambdaGenUUID.external_id
           report_name: !Ref ReportName
           s3prefix: !Ref s3prefix
           private_key: !Ref nOpsPrivateKey

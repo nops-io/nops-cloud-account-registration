@@ -19,12 +19,6 @@ variable "BucketName" {
   description = "s3 bucket name for nOps daily reports"
 }
 
-variable "ExternalId" {
-  type        = string
-  sensitive   = true
-  description = "External id required for cross account access role for nOps"
-}
-
 variable "nOpsApiKey" {
   type        = string
   sensitive   = true

@@ -15,7 +15,6 @@ resource "aws_cloudformation_stack_set" "master_payer_consolidated_nops_account_
     ReportName        = var.ReportName
     s3prefix          = var.s3prefix
     BucketName        = var.BucketName
-    ExternalId        = var.ExternalId
     nOpsApiKey        = var.nOpsApiKey
     nOpsPrivateKey    = var.nOpsPrivateKey
     AccNameToRegister = var.AccNameToRegister
@@ -48,7 +47,6 @@ resource "aws_cloudformation_stack_set" "member_consolidated_nops_account_regist
   }
 
   parameters = {
-    ExternalId        = var.ExternalId
     nOpsApiKey        = var.nOpsApiKey
     nOpsPrivateKey    = var.nOpsPrivateKey
     AccNameToRegister = var.AccNameToRegister

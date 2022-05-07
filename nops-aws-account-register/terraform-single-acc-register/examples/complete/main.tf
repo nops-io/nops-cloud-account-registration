@@ -19,7 +19,6 @@ module "nops_aws_acc_register" {
   ReportName        = var.ReportName
   s3prefix          = var.s3prefix
   BucketName        = var.BucketName
-  ExternalId        = var.ExternalId
   nOpsApiKey        = var.nOpsApiKey
   nOpsPrivateKey    = var.nOpsPrivateKey
   AccNameToRegister = var.AccNameToRegister

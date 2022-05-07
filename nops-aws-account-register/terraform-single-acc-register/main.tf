@@ -78,7 +78,7 @@ resource "aws_lambda_function" "nops_register_aws_acc" {
   environment {
     variables = {
       api_key                          = var.nOpsApiKey
-      external_id                      = var.ExternalId
+      external_id                      = random_string.random.id
       report_name                      = var.ReportName
       private_key                      = var.nOpsPrivateKey
       iam_role_for_nops                = aws_iam_role.nops_access_role.arn
