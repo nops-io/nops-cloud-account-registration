@@ -24,6 +24,3 @@ This folder contains the python code for the lambda function which registers AWS
 This folder contains a Terraform module which deploys CloudFormation stacksets.
 CloudFormation stacksets deploys the CloudFormation template for all accounts defined in the organizational unit (OU).
 
-### terraform-single-acc-register
-This folder contains a Terraform module which is an alternative for a single AWS account registration via CloudFormation.
-Any customer who wants to manage all resources through Terraform can use this module.
