@@ -19,6 +19,7 @@ def main_function():
     url = f"https://app.nops.io/c/admin/projectaws/?api_key={api_key}"
 
     if is_member_acc == "True":
+        print("member account registration")
         data = {
             "access_type": "role",
             "arn": iam_role_for_nops,
@@ -28,6 +29,7 @@ def main_function():
             "cloud_type":"aws"
         }
     else:
+        print("master account registration")
         s3_bucket_name_for_nops = environ.get('s3_bucket_name_for_nops')
         report_name = environ.get('report_name')
         s3prefix = environ.get('s3prefix')
