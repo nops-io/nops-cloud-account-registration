@@ -22,12 +22,6 @@ variable "BucketName" {
   description = "s3 bucket name for nOps daily reports"
 }
 
-variable "ExternalId" {
-  type        = string
-  sensitive   = true
-  description = "External id required for cross account access role for nOps"
-}
-
 variable "nOpsApiKey" {
   type        = string
   sensitive   = true
@@ -46,13 +40,29 @@ variable "AccNameToRegister" {
   description = "Account name to register in nOps."
 }
 
-variable "template_url" {
+variable "master_payer_acc_template_url" {
   type        = string
   default     = "https://nops-register-aws-account-us-east-1.s3.amazonaws.com/nops_register_aws_acc.yaml"
-  description = "CloudFormation template url."
+  description = "CloudFormation template url for consolidated billing master payer AWS account."
+}
+
+variable "member_acc_template_url" {
+  type        = string
+  default     = "https://nops-register-aws-account-us-east-1.s3.amazonaws.com/member_consolidated_aws_acc_nops_register.yaml"
+  description = "CloudFormation template url for member accounts."
 }
 
 variable "list_of_OU_ids" {
   type        = list(string)
-  description = "list of organisation unit ids to deploy stacks."
+  description = "list of Organization unit ids to deploy stacks on member AWS accounts."
+}
+
+variable "org_root_id" {
+  type        = list(string)
+  description = "AWS Organization root id for CloudFormation stackset execution role."
+}
+
+variable "master_payer_acc_id" {
+  type        = string
+  description = "AWS org Consolidated billing master payer account id."
 }

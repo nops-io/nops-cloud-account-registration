@@ -10,7 +10,9 @@ This Terraform module creates CloudFormation stacksets and creates resources req
         ExternalId              = "12345"
         NopsApiKey              = "12345"
         AccNameToRegister       = "demo"
+        master_payer_acc_id     = "98123576903"
         list_of_OU_ids          = ["ou-abcdefgh", "ou-ijklmn"]
+        org_root_id             = ["r-123b"]
     }
 ```
 ## Requirements
@@ -29,25 +31,38 @@ This Terraform module creates CloudFormation stacksets and creates resources req
 
 | Name | Type |
 |------|------|
-| [aws_cloudformation_stack_set.nops-account-register](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudformation_stack_set) | resource |
-| [aws_cloudformation_stack_set_instance.ou_instances](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudformation_stack_set_instance) | resource |
+| [aws_cloudformation_stack.execution_role_creation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudformation_stack) | resource |
+| [aws_cloudformation_stack_set.execution_role_creation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudformation_stack_set) | resource |
+| [aws_cloudformation_stack_set.master_payer_consolidated_nops_account_register](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudformation_stack_set) | resource |
+| [aws_cloudformation_stack_set.member_consolidated_nops_account_register](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudformation_stack_set) | resource |
+| [aws_cloudformation_stack_set_instance.execution_role_creation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudformation_stack_set_instance) | resource |
+| [aws_cloudformation_stack_set_instance.master_payer_consolidated_instances](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudformation_stack_set_instance) | resource |
+| [aws_cloudformation_stack_set_instance.member_consolidated_ou_instances](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudformation_stack_set_instance) | resource |
+| [aws_iam_role.AWSCloudFormationStackSetAdministrationRole](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_iam_role_policy.AWSCloudFormationStackSetAdministrationRole_ExecutionPolicy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
+| [aws_iam_policy_document.AWSCloudFormationStackSetAdministrationRole_ExecutionPolicy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.AWSCloudFormationStackSetAdministrationRole_assume_role_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|:----------------------------|---------|------|:--------:|
-| <a name="input_AccNameToRegister"></a> [AccNameToRegister](#input\_AccNameToRegister) | This Account name is registered in nOps. | `string` | n/a &nbsp;| yes |
-| <a name="input_BucketName"></a> [BucketName](#input\_BucketName) | S3 bucket name for nOps daily reports | `string` | `"nopsbucketforlogs"` | no |
-| <a name="input_ExternalId"></a> [ExternalId](#input\_ExternalId) | External id required to enable cross account access role for nOps | `string` | n/a | yes |
-| <a name="input_nOpsApiKey"></a> [nOpsApiKey](#input\_nOpsApiKey) | nOps API key to register AWS accounts | `string` | n/a | yes |
-| <a name="input_nOpsPrivateKey"></a> [nOpsPrivateKey](#input\_nOpsPrivateKey) | nOps private key to generate a signature for the API request (optional). If used, this should be a single line string that is 'escaped' eg. \\\n instead of \n | `string` | `""` | no |
-| <a name="input_ReportName"></a> [ReportName](#input\_ReportName) | Name for the report generated daily by nOps | `string` | `"nopsbilling-daily-gzip"` | no |
-| <a name="input_list_of_OU_ids"></a> [list\_of\_OU\_ids](#input\_list\_of\_OU\_ids) | List of organization unit IDs to deploy stacks. | `list(string)` | n/a | yes |
+|------|-------------|------|---------|:--------:|
+| <a name="input_AccNameToRegister"></a> [AccNameToRegister](#input\_AccNameToRegister) | Account name to register in nOps. | `string` | n/a | yes |
+| <a name="input_BucketName"></a> [BucketName](#input\_BucketName) | s3 bucket name for nOps daily reports | `string` | `"nopsbucketforlogs"` | no |
+| <a name="input_ReportName"></a> [ReportName](#input\_ReportName) | nOps daily generated report name | `string` | `"nopsbilling-daily-gzip"` | no |
+| <a name="input_list_of_OU_ids"></a> [list\_of\_OU\_ids](#input\_list\_of\_OU\_ids) | list of Organization unit ids to deploy stacks on member AWS accounts. | `list(string)` | n/a | yes |
+| <a name="input_master_payer_acc_id"></a> [master\_payer\_acc\_id](#input\_master\_payer\_acc\_id) | AWS org Consolidated billing master payer account id. | `string` | n/a | yes |
+| <a name="input_master_payer_acc_template_url"></a> [master\_payer\_acc\_template\_url](#input\_master\_payer\_acc\_template\_url) | CloudFormation template url for consolidated billing master payer AWS account. | `string` | `"https://nops-register-aws-account-us-east-1.s3.amazonaws.com/nops_register_aws_acc.yaml"` | no |
+| <a name="input_member_acc_template_url"></a> [member\_acc\_template\_url](#input\_member\_acc\_template\_url) | CloudFormation template url for member accounts. | `string` | `"https://nops-register-aws-account-us-east-1.s3.amazonaws.com/member_consolidated_aws_acc_nops_register.yaml"` | no |
+| <a name="input_nOpsApiKey"></a> [nOpsApiKey](#input\_nOpsApiKey) | nOps api key to register AWS accounts | `string` | n/a | yes |
+| <a name="input_nOpsPrivateKey"></a> [nOpsPrivateKey](#input\_nOpsPrivateKey) | nOps private key to generate signature for api request, it should be single line string (optional). | `string` | `""` | no |
+| <a name="input_org_root_id"></a> [org\_root\_id](#input\_org\_root\_id) | AWS Organization root id for CloudFormation stackset execution role. | `list(string)` | n/a | yes |
 | <a name="input_s3prefix"></a> [s3prefix](#input\_s3prefix) | nOps daily generated reports folder prefix | `string` | `"something"` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to be applied to the resource | `map(any)` | `{}` | no |
-| <a name="input_template_url"></a> [template\_url](#input\_template\_url) | CloudFormation template url | `string` | `"https://nops-register-aws-account-us-east-1.s3.amazonaws.com/nops_register_aws_acc.yaml"` | no |
+
+
 
 ## Outputs
 

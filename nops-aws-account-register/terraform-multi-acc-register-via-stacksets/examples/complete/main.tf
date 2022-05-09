@@ -16,13 +16,14 @@ provider "aws" {
 module "nops_aws_acc_register" {
   source = "../../"
 
-  ReportName        = var.ReportName
-  s3prefix          = var.s3prefix
-  BucketName        = var.BucketName
-  ExternalId        = var.ExternalId
-  nOpsApiKey        = var.nOpsApiKey
-  nOpsPrivateKey    = var.nOpsPrivateKey
-  AccNameToRegister = var.AccNameToRegister
-  list_of_OU_ids    = var.list_of_OU_ids
-  tags              = var.tags
+  ReportName          = var.ReportName
+  s3prefix            = var.s3prefix
+  BucketName          = var.BucketName
+  nOpsApiKey          = var.nOpsApiKey
+  nOpsPrivateKey      = var.nOpsPrivateKey
+  AccNameToRegister   = var.AccNameToRegister
+  list_of_OU_ids      = var.list_of_OU_ids
+  org_root_id         = var.org_root_id
+  master_payer_acc_id = var.master_payer_acc_id
+  tags                = var.tags
 }

@@ -10,26 +10,42 @@ from cfnresponse import send, SUCCESS
 
 def main_function():
     #### vars setup
+    is_member_acc = environ.get('is_member_acc', "False")
     api_key = environ.get('api_key')
     iam_role_for_nops = environ.get('iam_role_for_nops')
-    s3_bucket_name_for_nops = environ.get('s3_bucket_name_for_nops')
     external_id = environ.get('external_id')
     aws_acc_name_to_register_in_nops = environ.get('aws_acc_name_to_register_in_nops')
-    report_name = environ.get('report_name')
     client_id = api_key.split(".")[0]
     url = f"https://app.nops.io/c/admin/projectaws/?api_key={api_key}"
 
-    data = {
-        "access_type": "role",
-        "arn": iam_role_for_nops,
-        "bucket": s3_bucket_name_for_nops,
-        "external_id": external_id,
-        "name": aws_acc_name_to_register_in_nops,
-        "client": client_id,
-        "cloud_type":"aws",
-        "report_name": report_name
-    }
+    if is_member_acc == "True":
+        print("member account registration")
+        data = {
+            "access_type": "role",
+            "arn": iam_role_for_nops,
+            "external_id": external_id,
+            "name": aws_acc_name_to_register_in_nops,
+            "client": client_id,
+            "cloud_type":"aws"
+        }
+    else:
+        print("master account registration")
+        s3_bucket_name_for_nops = environ.get('s3_bucket_name_for_nops')
+        report_name = environ.get('report_name')
+        s3prefix = environ.get('s3prefix')
+        data = {
+            "access_type": "role",
+            "arn": iam_role_for_nops,
+            "bucket": s3_bucket_name_for_nops,
+            "external_id": external_id,
+            "name": aws_acc_name_to_register_in_nops,
+            "client": client_id,
+            "cloud_type":"aws",
+            "report_name": report_name,
+            "report_path_prefix": s3prefix
+        }
 
+    print(f'payload: {data}')
     if(len(environ.get('private_key')) == 0):
         print("private key not found in variable proceeding without signature")
         response = requests.post(url, json=data)

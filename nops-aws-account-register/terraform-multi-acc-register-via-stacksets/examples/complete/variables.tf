@@ -19,12 +19,6 @@ variable "BucketName" {
   description = "s3 bucket name for nOps daily reports"
 }
 
-variable "ExternalId" {
-  type        = string
-  sensitive   = true
-  description = "External id required for cross account access role for nOps"
-}
-
 variable "nOpsApiKey" {
   type        = string
   sensitive   = true
@@ -44,5 +38,15 @@ variable "AccNameToRegister" {
 
 variable "list_of_OU_ids" {
   type        = list(string)
-  description = "list of organisation unit ids to deploy stacks."
+  description = "list of Organization unit ids to deploy stacks."
+}
+
+variable "org_root_id" {
+  type        = list(string)
+  description = "AWS Organization root id."
+}
+
+variable "master_payer_acc_id" {
+  type        = string
+  description = "AWS org Consolidated billing master payer account id."
 }

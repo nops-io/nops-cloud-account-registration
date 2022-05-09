@@ -2,21 +2,6 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: "cloudformation template to register AWS account to nOps"
 
 Parameters: 
-  ReportName:
-    Type: String
-    Default: nopsbilling-daily-gzip
-    Description: nOps daily generated report name.
-
-  s3prefix:
-    Type: String
-    Default: something
-    Description: nOps daily generated reports folder prefix.
-
-  BucketName:
-    Type: String
-    Default: nopsbucketforlogs
-    Description: s3 bucket name for nOps daily reports.
-
   nOpsApiKey:
     Type: String
     NoEcho: true
@@ -33,74 +18,6 @@ Parameters:
     Description: nOps private key to generate signature for api request, it should be single line string (optional).
 
 Resources:
-  nopsBucketForLogs:
-    Type: AWS::S3::Bucket
-    Properties: 
-      BucketName: !Sub '${BucketName}-${AWS::AccountId}'
-
-
-  BucketPolicy:
-    Type: AWS::S3::BucketPolicy
-    Properties:
-      Bucket: !Ref nopsBucketForLogs
-      PolicyDocument:
-        Version: 2012-10-17
-        Id : 'Policy1335892530063'
-        Statement:
-          - Action:
-              - 's3:GetBucketAcl'
-              - 's3:GetBucketPolicy'
-            Effect: Allow
-            Sid: 'Stmt1335892150622'
-            Resource: !Join
-              - ''
-              - - 'arn:aws:s3:::'
-                - !Ref nopsBucketForLogs
-            Principal: 
-              Service: 'billingreports.amazonaws.com'
-            Condition:
-              StringEquals:
-                  aws:SourceArn: !Sub 'arn:aws:cur:${AWS::Region}:${AWS::AccountId}:definition/*'
-                  aws:SourceAccount: !Sub '${AWS::AccountId}'
-
-          - Action:
-              - 's3:PutObject'
-            Effect: Allow
-            Sid: 'Stmt1335892526596'
-            Resource: !Join
-              - ''
-              - - 'arn:aws:s3:::'
-                - !Ref nopsBucketForLogs
-                - /*
-            Principal: 
-              Service: 'billingreports.amazonaws.com'
-            Condition:
-              StringEquals:
-                  aws:SourceArn: !Sub 'arn:aws:cur:${AWS::Region}:${AWS::AccountId}:definition/*'
-                  aws:SourceAccount: !Sub '${AWS::AccountId}'
-
-
-  nopsReportDefinition:
-    Type: AWS::CUR::ReportDefinition
-    DependsOn: 
-      - nopsBucketForLogs
-      - BucketPolicy
-    Properties: 
-      AdditionalArtifacts: 
-        - "REDSHIFT"
-        - "QUICKSIGHT"
-      AdditionalSchemaElements: 
-        - "RESOURCES"
-      Compression: "GZIP"
-      RefreshClosedReports: true
-      Format: "textORcsv"
-      ReportName: !Ref ReportName
-      ReportVersioning: "OVERWRITE_REPORT"
-      S3Bucket: !Ref nopsBucketForLogs
-      S3Prefix: !Ref s3prefix
-      S3Region: !Sub '${AWS::Region}'
-      TimeUnit: "DAILY"
-
   nopsLambdaExecutionRole: 
     Type: "AWS::IAM::Role"
     Properties: 
@@ -275,13 +192,7 @@ Resources:
                   -  "wellarchitected:*"
                   -  "workspaces:DescribeWorkspaceDirectories"
                   -  "workspaces:DescribeWorkspaces"
-                Resource: "*"
-              - Effect: "Allow"
-                Action:
-                  - "s3:*"
-                Resource:
-                  - !Sub 'arn:aws:s3:::${BucketName}-${AWS::AccountId}'
-                  - !Sub 'arn:aws:s3:::${BucketName}-${AWS::AccountId}/*'
+                Resource: '*'
 
   LambdaRegisterAwsAcc:
     Type: "AWS::Lambda::Function"
@@ -299,12 +210,10 @@ Resources:
         Variables:
           api_key: !Ref nOpsApiKey
           external_id: !GetAtt TriggerLambdaGenUUID.external_id
-          report_name: !Ref ReportName
-          s3prefix: !Ref s3prefix
           private_key: !Ref nOpsPrivateKey
           iam_role_for_nops: !GetAtt nopsAccessIamRole.Arn
-          s3_bucket_name_for_nops: !Sub '${BucketName}-${AWS::AccountId}'
           aws_acc_name_to_register_in_nops: !Sub '${AccNameToRegister}-${AWS::AccountId}'
+          is_member_acc: "True"
     DependsOn: 
       - nopsLambdaExecutionRole
       - nopsAccessIamRole

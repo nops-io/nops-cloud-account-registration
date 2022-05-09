@@ -1,14 +1,18 @@
 fileignoreconfig:
+- filename: nops-aws-account-register/cloudformation-org-member-accounts-register/member_consolidated_aws_acc_nops_register.yaml
+  checksum: 5f1e25705163cd7dee88e5904712f0494519a7dd6811ea1f21e24b87bed68444
 - filename: nops-aws-account-register/cloudformation-single-acc-register/nops_register_aws_acc.yaml
-  checksum: 963ac7cd51155c83baa208b4e91a32d657e1cc186f3ce8f14d628fdc52f24484
+  checksum: 75f700e43cea13ce6b26521a34e7f21bc38a0338ed8504f2d75798c610353d82
+- filename: nops-aws-account-register/cloudformation/org-accounts-register/child_consolidated_aws_acc_nops_register.yaml
+  checksum: 0c359119f60be4c0d69198f1fce944bcb6239b03eab9e1ce3de885bdfb7b6e06
 - filename: nops-aws-account-register/terraform-multi-acc-register-via-stacksets/README.md
-  checksum: 57540292012a41ffb06680896a866947baf6334363c8ec76fac03f23d7f40e5e
+  checksum: bf3f7354d5d92c23004235cdb93286abd0380f29385c4a082453e6c39a274b84
 - filename: nops-aws-account-register/terraform-multi-acc-register-via-stacksets/examples/complete/example-vars.auto.tfvars
   checksum: ccbb7eaa0a83edcb6855ef423efb2ae9c4ef3b3dfedcd3dd33cd8137f197e4df
 - filename: nops-aws-account-register/terraform-multi-acc-register-via-stacksets/examples/complete/main.tf
   checksum: eae0edd048a1746aade70aecda8a3ca2a66a8fa7d421664c2558397e3d9fcebd
 - filename: nops-aws-account-register/terraform-multi-acc-register-via-stacksets/main.tf
-  checksum: 6dc3a3fe4274f34e351416461c8f0a0e3354226520d6c7419fa381aabd2dd91b
+  checksum: f09fbd3d1521ea03aabf8c10c19e5ff1d38f0bf7bcb2571effa5032e346bc3eb
 - filename: nops-aws-account-register/terraform-single-acc-register/README.md
   checksum: c0566b6aff8e180dfc43a2fb8c7b699c0d4fa5b9190d73f876bdd1222186188c
 - filename: nops-aws-account-register/terraform-single-acc-register/examples/complete/example-vars.auto.tfvars
@@ -17,4 +21,8 @@ fileignoreconfig:
   checksum: d7da919cc55bd1afd80939635c1ac5bbc42f2abc60925b164fc645fdb8b1f78a
 - filename: nops-aws-account-register/terraform-single-acc-register/main.tf
   checksum: b6e90f33726746553e16a103409ac4a1ae69187b3e790f60aa39a9d12f1630c1
+- filename: nops-aws-account-register/terraform/terraform-multi-acc-register-via-stacksets/examples/complete/main.tf
+  checksum: 7a6577848ccde42cf8f086f7d8e8401f857304d5761f16769031dd9d46880bb4
+- filename: nops-aws-account-register/terraform/terraform-multi-acc-register-via-stacksets/main.tf
+  checksum: 3157b826c4b6b199a9e024cf82edab89a6b99183ee8d7b720f62116482c937aa
 version: "1.0"

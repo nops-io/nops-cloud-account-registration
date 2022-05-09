@@ -12,7 +12,10 @@
 ## Following is the list of folders and a description of the items they contain:
 
 ### cloudformation-single-acc-register
-This folder contains CloudFormation template to register a single AWS account with nOps.
+This folder contains CloudFormation template to register a single AWS account (No AWS organization) or Organization master payer account with nOps.
+
+### cloudformation-org-member-accounts-register
+This folder contains CloudFormation templates to register multiple AWS organization member accounts to nOps.
 
 ### lambda_functions
 This folder contains the python code for the lambda function which registers AWS accounts to nOps.
@@ -21,6 +24,3 @@ This folder contains the python code for the lambda function which registers AWS
 This folder contains a Terraform module which deploys CloudFormation stacksets.
 CloudFormation stacksets deploys the CloudFormation template for all accounts defined in the organizational unit (OU).
 
-### terraform-single-acc-register
-This folder contains a Terraform module which is an alternative for a single AWS account registration via CloudFormation.
-Any customer who wants to manage all resources through Terraform can use this module.
