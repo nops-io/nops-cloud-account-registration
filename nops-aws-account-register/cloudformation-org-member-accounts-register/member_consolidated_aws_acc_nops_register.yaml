@@ -193,6 +193,9 @@ Resources:
                   -  "wellarchitected:*"
                   -  "workspaces:DescribeWorkspaceDirectories"
                   -  "workspaces:DescribeWorkspaces"
+                  -  "ec2:DescribeReservedInstances"
+                  -  "elasticloadbalancing:DescribeTargetGroups"
+                  -  "iam:ListInstanceProfiles"
                 Resource: '*'
 
   LambdaRegisterAwsAcc:
