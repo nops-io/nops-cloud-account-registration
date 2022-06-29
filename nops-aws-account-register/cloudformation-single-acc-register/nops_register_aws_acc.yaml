@@ -276,7 +276,6 @@ Resources:
                   -  "wellarchitected:*"
                   -  "workspaces:DescribeWorkspaceDirectories"
                   -  "workspaces:DescribeWorkspaces"
-                  -  "rds:DescribeDBInstances"
                   -  "ec2:DescribeReservedInstances"
                   -  "elasticloadbalancing:DescribeTargetGroups"
                   -  "iam:ListInstanceProfiles"
