@@ -1,0 +1,43 @@
+name: Release
+
+on: 
+  push:
+    branches: ['release']
+
+jobs:
+  release-new-package-version:
+    name: Release
+    runs-on: ubuntu-latest
+    environment: nOpsDeployment
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
+
+    steps:
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.NOPS_ROLE }}
+          role-session-name: GitHubActionsDeployCF
+          aws-region: us-east-1
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python 3.9
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.9
+
+      - name: Build nops-aws-account-register package
+        run: |
+          cd nops-aws-account-register
+          ./cicd/package.sh
+
+      - name: Release nops-aws-account-register package
+        run: |
+          cd nops-aws-account-register
+          ./cicd/release.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
