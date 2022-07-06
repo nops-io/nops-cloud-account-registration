@@ -24,3 +24,4 @@ This folder contains the python code for the lambda function which registers AWS
 This folder contains a Terraform module which deploys CloudFormation stacksets.
 CloudFormation stacksets deploys the CloudFormation template for all accounts defined in the organizational unit (OU).
 
+Push Check.
