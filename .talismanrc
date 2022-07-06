@@ -1,8 +1,8 @@
 fileignoreconfig:
 - filename: nops-aws-account-register/cloudformation-org-member-accounts-register/member_consolidated_aws_acc_nops_register.yaml
-  checksum: 5f1e25705163cd7dee88e5904712f0494519a7dd6811ea1f21e24b87bed68444
+  checksum: 38fc5103793654d39353c33cdabdaafe42fa597b474bf6d1dae72a9a8fda71f5
 - filename: nops-aws-account-register/cloudformation-single-acc-register/nops_register_aws_acc.yaml
-  checksum: 75f700e43cea13ce6b26521a34e7f21bc38a0338ed8504f2d75798c610353d82
+  checksum: 072e57fefa8a1b6bae46531cfb292099a9d1a9909390e84111f4051ac0caada8
 - filename: nops-aws-account-register/cloudformation/org-accounts-register/child_consolidated_aws_acc_nops_register.yaml
   checksum: 0c359119f60be4c0d69198f1fce944bcb6239b03eab9e1ce3de885bdfb7b6e06
 - filename: nops-aws-account-register/terraform-multi-acc-register-via-stacksets/README.md
