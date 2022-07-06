@@ -17,7 +17,170 @@ Parameters:
     Default: ''
     Description: nOps private key to generate signature for api request, it should be single line string (optional).
 
+  pGithubReleaseVersion:
+    Type: String
+    Default: v0.1.0
+    Description: github release version.
+
 Resources:
+  rNopsDistBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: "aws:kms"
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  rNopsDistBucketPolicy:
+    Type: "AWS::S3::BucketPolicy"
+    Properties:
+      Bucket: !Ref rNopsDistBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: AllowSSLRequestsOnly
+            Action:
+              - s3:*
+            Effect: Deny
+            Resource:
+              - !Sub "${rNopsDistBucket.Arn}"
+              - !Sub "${rNopsDistBucket.Arn}/*"
+            Condition:
+              Bool:
+                "aws:SecureTransport": "false"
+            Principal: "*"
+  
+  rNopsZipCopierRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+      Policies:
+        - PolicyName: ForwarderZipCopierRolePolicy0
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:PutObject
+                  - s3:DeleteObject
+                  - s3:GetObject
+                Resource:
+                  - Fn::Join:
+                      - "/"
+                      - - Fn::GetAtt: "rNopsDistBucket.Arn"
+                        - "*"
+              - Effect: Allow
+                Action:
+                  - s3:ListBucket
+                Resource:
+                  - Fn::GetAtt: "rNopsDistBucket.Arn"
+
+  rZipCopierLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: Copies nOps Cloudtrail Forwarder zip to the destination S3 bucket
+      Handler: index.handler
+      Runtime: python3.9
+      Timeout: 300
+      Code:
+        ZipFile: |
+          import json
+          import logging
+          import threading
+          import boto3
+          import urllib.request
+          import os
+
+          def send_cfn_resp(event, context, response_status):
+              resp_body = json.dumps({
+                  'Status': response_status,
+                  'Reason': f'See reasons in CloudWatch Logs - group: {context.log_group_name}, stream:{context.log_stream_name}',
+                  'PhysicalResourceId': context.log_stream_name,
+                  'StackId': event['StackId'],
+                  'RequestId': event['RequestId'],
+                  'LogicalResourceId': event['LogicalResourceId'],
+                  'Data': {}
+              }).encode('utf-8')
+              req = urllib.request.Request(url=event['ResponseURL'], data=resp_body, method='PUT')
+              with urllib.request.urlopen(req) as f:
+                  logging.info(f'Sent response to CloudFormation: {f.status}, {f.reason}')
+          def delete_zips(bucket):
+              s3 = boto3.resource('s3')
+              bucket = s3.Bucket(bucket)
+              bucket.objects.all().delete()
+          def copy_zip(source_zip_url, dest_zips_bucket, s3_file_name):
+              s3 = boto3.client('s3')
+              s3_prelude = "s3://"
+              filename = s3_file_name
+              if source_zip_url.startswith(s3_prelude):
+                  parts = source_zip_url[len(s3_prelude):].split('/')
+                  bucket = parts[0]
+                  key = '/'.join(parts[1:])
+                  response = s3.get_object(Bucket=bucket, Key=key)
+                  data = response["Body"]
+                  s3.upload_fileobj(data, dest_zips_bucket, filename)
+              else:
+                  with urllib.request.urlopen(source_zip_url) as data:
+                      s3.upload_fileobj(data, dest_zips_bucket, filename)
+          def timeout(event, context):
+              logging.error('Execution is about to time out, sending failure response to CloudFormation')
+              send_cfn_resp(event, context, 'FAILED')
+          def handler(event, context):
+              # make sure we send a failure to CloudFormation if the function
+              # is going to timeout
+              timer = threading.Timer((context.get_remaining_time_in_millis()
+                        / 1000.00) - 0.5, timeout, args=[event, context])
+              timer.start()
+              logging.info(f'Received event: {json.dumps(event)}')
+              try:
+                  source_zip_url = event['ResourceProperties']['SourceZipUrl']
+                  dest_zips_bucket = event['ResourceProperties']['DestZipsBucket']
+                  s3_file_name = event['ResourceProperties']['PackageFileName']
+                  if event['RequestType'] == 'Delete':
+                      delete_zips(dest_zips_bucket)
+                  else:
+                      copy_zip(source_zip_url, dest_zips_bucket, s3_file_name)
+              except Exception as e:
+                  logging.exception(f'Exception when copying zip from {source_zip_url} to {dest_zips_bucket}')
+                  send_cfn_resp(event, context, 'FAILED')
+              else:
+                  send_cfn_resp(event, context, 'SUCCESS')
+              finally:
+                  timer.cancel()
+      Role: !GetAtt "rNopsZipCopierRole.Arn"
+
+  rTriggerCopyGenUUIDPackage:
+    Type: Custom::ForwarderZip
+    Properties:
+      ServiceToken: !GetAtt "rZipCopierLambdaFunction.Arn"
+      DestZipsBucket: !Ref "rNopsDistBucket"
+      SourceZipUrl: !Sub "https://github.com/nops-io/nops-cloud-account-registration/releases/download/${pGithubReleaseVersion}/generate_external_id-${pGithubReleaseVersion}.zip"
+      PackageFileName: !Sub "generate_external_id-${pGithubReleaseVersion}.zip"
+
+  rTriggerCopyAccRegPackage:
+    Type: Custom::ForwarderZip
+    Properties:
+      ServiceToken: !GetAtt "rZipCopierLambdaFunction.Arn"
+      DestZipsBucket: !Ref "rNopsDistBucket"
+      SourceZipUrl: !Sub "https://github.com/nops-io/nops-cloud-account-registration/releases/download/${pGithubReleaseVersion}/nops_register_aws_acc-${pGithubReleaseVersion}.zip"
+      PackageFileName: !Sub "nops_register_aws_acc-${pGithubReleaseVersion}.zip"
+
   nopsLambdaExecutionRole: 
     Type: "AWS::IAM::Role"
     Properties: 
@@ -46,8 +209,8 @@ Resources:
     Type: "AWS::Lambda::Function"
     Properties:
       Code:
-        S3Bucket: !Join [ "", [ "nops-register-aws-account-", !Ref AWS::Region ] ]
-        S3Key: "generate_external_id.zip"
+        S3Bucket: !Ref "rNopsDistBucket"
+        S3Key: !Sub "generate_external_id-${pGithubReleaseVersion}.zip"
       PackageType: Zip
       Handler: "generate_external_id.cloudformation_handler"
       Role: !GetAtt nopsLambdaExecutionRole.Arn
@@ -56,6 +219,8 @@ Resources:
       FunctionName: "generate-external-id"
     DependsOn: 
       - nopsLambdaExecutionRole
+      - rTriggerCopyAccRegPackage
+      - rTriggerCopyGenUUIDPackage
 
   PermissionLambdaGenUUID:
     Type: "AWS::Lambda::Permission"
@@ -202,8 +367,8 @@ Resources:
     Type: "AWS::Lambda::Function"
     Properties:
       Code:
-        S3Bucket: !Join [ "", [ "nops-register-aws-account-", !Ref AWS::Region ] ]
-        S3Key: "nops_register_aws_acc.zip"
+        S3Bucket: !Ref "rNopsDistBucket"
+        S3Key: !Sub "nops_register_aws_acc-${pGithubReleaseVersion}.zip"
       PackageType: Zip
       Handler: "nops_register_aws_acc.cloudformation_handler"
       Role: !GetAtt nopsLambdaExecutionRole.Arn
@@ -221,6 +386,9 @@ Resources:
     DependsOn: 
       - nopsLambdaExecutionRole
       - nopsAccessIamRole
+      - rTriggerCopyAccRegPackage
+      - rTriggerCopyGenUUIDPackage
+
 
   PermissionLambdaRegisterAwsAcc:
     Type: "AWS::Lambda::Permission"
