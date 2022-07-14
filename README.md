@@ -3,8 +3,10 @@ This project contains a set of tools and example code to configure IAM permissio
 
 ## Table of contents
 - [Overview](#overview)
-- [AWS Account Register](nops-aws-account-register/README.md)
+- [AWS Account Registration](nops-aws-account-register/README.md)
 
 
 ## Overview
-nOps requires safe, secure, and read-only access to your Cloud accounts to give you the analysis, dashboards, and reports that you need. This repo contains IaaC code to automate Cloud Account registration process.
+nOps requires safe, secure, and AWS approved access to your Cloud accounts in order to give you the analysis, dashboards, and reports that you need.
+
+This repo contains IaaC code to automate Cloud Account registration process.

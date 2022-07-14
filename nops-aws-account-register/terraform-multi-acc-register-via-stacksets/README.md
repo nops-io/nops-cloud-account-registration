@@ -19,31 +19,31 @@ This Terraform module creates CloudFormation stacksets and creates resources req
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | < 4.0 |
+| aws  | < 4.0   |
 
 ## Providers
 
-| Name | Version |
-|------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | < 4.0 |
+| Name                  | Version |
+|-----------------------|---------|
+| [AWS](./providers.tf) | < 4.0   |
 
 ## Resources
 
-| Name | Type |
-|------|------|
-| [aws_cloudformation_stack.execution_role_creation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudformation_stack) | resource |
-| [aws_cloudformation_stack_set.execution_role_creation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudformation_stack_set) | resource |
-| [aws_cloudformation_stack_set.master_payer_consolidated_nops_account_register](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudformation_stack_set) | resource |
-| [aws_cloudformation_stack_set.member_consolidated_nops_account_register](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudformation_stack_set) | resource |
-| [aws_cloudformation_stack_set_instance.execution_role_creation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudformation_stack_set_instance) | resource |
-| [aws_cloudformation_stack_set_instance.master_payer_consolidated_instances](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudformation_stack_set_instance) | resource |
-| [aws_cloudformation_stack_set_instance.member_consolidated_ou_instances](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudformation_stack_set_instance) | resource |
-| [aws_iam_role.AWSCloudFormationStackSetAdministrationRole](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
-| [aws_iam_role_policy.AWSCloudFormationStackSetAdministrationRole_ExecutionPolicy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
-| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
-| [aws_iam_policy_document.AWSCloudFormationStackSetAdministrationRole_ExecutionPolicy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
-| [aws_iam_policy_document.AWSCloudFormationStackSetAdministrationRole_assume_role_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
-| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
+| Name                                                                                                                                                                                         | Type        | Details                                                              |
+|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|----------------------------------------------------------------------|
+| [aws_cloudformation_stack.execution_role_creation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudformation_stack)                                         | resource    | setup-stacksets-permissions.tf (line:32)                             |
+| [aws_cloudformation_stack_set.execution_role_creation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudformation_stack_set)                                 | resource    | setup-stacksets-permissions.tf (line:48)                             |
+| [aws_cloudformation_stack_set.master_payer_consolidated_nops_account_register](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudformation_stack_set)         | resource    | main.tf (line:7)                                                     |
+| [aws_cloudformation_stack_set.member_consolidated_nops_account_register](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudformation_stack_set)               | resource    | main.tf (line:40)                                                    |
+| [aws_cloudformation_stack_set_instance.execution_role_creation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudformation_stack_set_instance)               | resource    | setup-stacksets-permissions.tf (line:69)                             |
+| [aws_cloudformation_stack_set_instance.master_payer_consolidated_instances](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudformation_stack_set_instance)   | resource    | main.tf (line:33)                                                    |
+| [aws_cloudformation_stack_set_instance.member_consolidated_ou_instances](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudformation_stack_set_instance)      | resource    | main.tf (line:61)                                                    |
+| [aws_iam_role.AWSCloudFormationStackSetAdministrationRole](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role)                                             | resource    | setup-stacksets-permissions.tf (line:21)                             |
+| [aws_iam_role_policy.AWSCloudFormationStackSetAdministrationRole_ExecutionPolicy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy)               | resource    | setup-stacksets-permissions.tf (line:26)                             |
+| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity)                                                                | data source | setup-stacksets-permissions.tf (line:36, line:57)                    |
+| [aws_iam_policy_document.AWSCloudFormationStackSetAdministrationRole_ExecutionPolicy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document)    | data source | setup-stacksets-permissions.tf (line:13)                             |
+| [aws_iam_policy_document.AWSCloudFormationStackSetAdministrationRole_assume_role_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source | setup-stacksets-permissions.tf (line:1)                              |
+| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region)                                                                                  | data source | main.tf (line:35, line:66), setup-stacksets-permissions.tf (line:46) |
 
 ## Inputs
 
