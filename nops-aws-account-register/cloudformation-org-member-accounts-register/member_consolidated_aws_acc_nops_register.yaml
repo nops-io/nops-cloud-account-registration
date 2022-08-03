@@ -19,7 +19,7 @@ Parameters:
 
   pGithubReleaseVersion:
     Type: String
-    Default: v0.1.1
+    Default: v0.1.2
     Description: github release version.
 
 Resources:
@@ -268,6 +268,11 @@ Resources:
                   - ce:GetReservationPurchaseRecommendation
                   - ce:GetRightsizingRecommendation
                   - ce:GetSavingsPlansPurchaseRecommendation
+                  - ce:GetReservationCoverage
+                  - ce:GetReservationUtilization
+                  - ce:GetSavingsPlansCoverage
+                  - ce:GetSavingsPlansUtilization
+                  - ce:GetSavingsPlansUtilizationDetails
                   - cloudformation:DescribeStackResources
                   - cloudformation:DescribeStacks
                   - cloudformation:GetTemplate
@@ -297,6 +302,7 @@ Resources:
                   - ec2:DescribeNatGateways
                   - ec2:DescribeNetworkInterfaces
                   - ec2:DescribeReservedInstancesOfferings
+                  - ec2:DescribeReservedInstances
                   - ec2:DescribeRouteTables
                   - ec2:DescribeSecurityGroups
                   - ec2:DescribeSnapshots
@@ -306,11 +312,16 @@ Resources:
                   - ecs:DescribeClusters
                   - ecs:ListClusters
                   - eks:ListClusters
+                  - eks:DescribeCluster
+                  - eks:DescribeNodegroup
+                  - eks:ListNodegroups
                   - elasticache:DescribeCacheClusters
                   - elasticache:DescribeCacheSubnetGroups
                   - elasticache:DescribeReplicationGroups
                   - elasticfilesystem:DescribeFileSystems
                   - elasticloadbalancing:DescribeLoadBalancers
+                  - elasticloadbalancing:DescribeTargetGroups
+                  - elasticloadbalancing:DescribeTargetHealth
                   - es:DescribeDomains
                   - es:DescribeElasticsearchDomains
                   - es:DescribeReservedElasticsearchInstances
@@ -326,16 +337,20 @@ Resources:
                   - iam:ListAccountAliases
                   - iam:ListAttachedGroupPolicies
                   - iam:ListAttachedUserPolicies
+                  - iam:ListAttachedRolePolicies
                   - iam:ListGroupsForUser
                   - iam:ListMFADevices
                   - iam:ListRoles
                   - iam:ListUserPolicies
                   - iam:ListUsers
+                  - iam:ListPolicyVersions
+                  - iam:ListInstanceProfiles
                   - inspector:ListAssessmentRuns
                   - kms:ListKeys
                   - lambda:GetFunction
                   - lambda:GetPolicy
                   - lambda:ListFunctions
+                  - organizations:DescribeAccount
                   - rds:DescribeDBInstances
                   - rds:DescribeDBSnapshots
                   - rds:DescribePendingMaintenanceActions
