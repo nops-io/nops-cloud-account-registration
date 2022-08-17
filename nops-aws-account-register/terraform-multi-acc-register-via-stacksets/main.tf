@@ -56,6 +56,10 @@ resource "aws_cloudformation_stack_set" "member_consolidated_nops_account_regist
     "CAPABILITY_NAMED_IAM"
   ]
   tags = var.tags
+  depends_on = [
+    aws_iam_role.AWSCloudFormationStackSetAdministrationRole,
+    aws_cloudformation_stack_set_instance.execution_role_creation
+  ]
 }
 
 resource "aws_cloudformation_stack_set_instance" "member_consolidated_ou_instances" {
