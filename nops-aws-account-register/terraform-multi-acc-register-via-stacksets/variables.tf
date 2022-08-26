@@ -42,13 +42,13 @@ variable "AccNameToRegister" {
 
 variable "master_payer_acc_template_url" {
   type        = string
-  default     = "https://nops-register-aws-account-us-east-1.s3.amazonaws.com/nops_register_aws_acc-v0.1.3.yaml"
+  default     = "https://nops-register-aws-account-us-east-1.s3.amazonaws.com/nops_register_aws_acc-v0.1.4.yaml"
   description = "CloudFormation template url for consolidated billing master payer AWS account."
 }
 
 variable "member_acc_template_url" {
   type        = string
-  default     = "https://nops-register-aws-account-us-east-1.s3.amazonaws.com/member_consolidated_aws_acc_nops_register-v0.1.3.yaml"
+  default     = "https://nops-register-aws-account-us-east-1.s3.amazonaws.com/member_consolidated_aws_acc_nops_register-v0.1.4.yaml"
   description = "CloudFormation template url for member accounts."
 }
 
