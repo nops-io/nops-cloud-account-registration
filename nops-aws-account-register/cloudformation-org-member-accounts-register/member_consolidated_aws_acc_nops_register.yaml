@@ -19,7 +19,7 @@ Parameters:
 
   pGithubReleaseVersion:
     Type: String
-    Default: v0.1.4
+    Default: v0.1.5
     Description: github release version.
 
 Resources:
@@ -327,6 +327,7 @@ Resources:
                   - es:DescribeReservedElasticsearchInstances
                   - es:DescribeReservedInstances
                   - es:ListDomainNames
+                  - events:CreateEventBus
                   - guardduty:ListDetectors
                   - iam:GetAccessKeyLastUsed
                   - iam:GetAccountPasswordPolicy
