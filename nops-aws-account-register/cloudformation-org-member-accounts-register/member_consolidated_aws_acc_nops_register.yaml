@@ -269,6 +269,7 @@ Resources:
         Statement: 
               - Action:                 
                   - cur:DescribeReportDefinitions
+                  - cur:DeleteReportDefinition                  
                   - cur:PutReportDefinition
                   - cur:DeleteReportDefinition
                   - events:CreateEventBus
