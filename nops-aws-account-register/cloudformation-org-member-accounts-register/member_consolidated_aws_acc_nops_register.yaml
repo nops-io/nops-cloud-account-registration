@@ -19,7 +19,7 @@ Parameters:
 
   pGithubReleaseVersion:
     Type: String
-    Default: v0.1.6
+    Default: v0.1.7
     Description: github release version.
 
 Resources:
@@ -270,12 +270,15 @@ Resources:
               - Action:                 
                   - cur:DescribeReportDefinitions
                   - cur:PutReportDefinition
+                  - cur:DeleteReportDefinition
                   - events:CreateEventBus
                   - organizations:AcceptHandshake
                   - organizations:CancelHandshake
                   - organizations:DeclineHandshake
                   - organizations:InviteAccountToOrganization
                   - organizations:MoveAccount
+                  - s3:HeadBucket
+                  - s3:HeadObject                  
                   - support:DescribeTrustedAdvisorCheckRefreshStatuses
                   - support:DescribeTrustedAdvisorCheckResult
                   - support:DescribeTrustedAdvisorChecks
@@ -475,29 +478,6 @@ Resources:
                   - workmail:ListUsers
                 Effect: Deny
                 Resource: "*"
-      Roles: [!Ref nopsAccessIamRole]
-
-  nopsSystemBucketDenyPolicy:
-    Type: AWS::IAM::Policy
-    Properties:
-      PolicyName: NopsSystemBucketDenyPolicy
-      PolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: Deny
-            Action:
-              - s3:GetObject
-            Resource:
-              - "arn:aws:s3:::*"
-            Condition:
-              ArnNotEquals: {
-                "aws:SourceArn": [
-                  !Sub "arn:aws:s3:::${SystemBucketID}",
-                  !Sub "arn:aws:s3:::${SystemBucketID}/*",
-                  !Sub "arn:aws:s3:::${SystemBucketID}-nops-${AWS::AccountId}",
-                  !Sub "arn:aws:s3:::${SystemBucketID}-nops-${AWS::AccountId}/*"
-                ]
-              }
       Roles: [!Ref nopsAccessIamRole]
 
   nopsSystemBucketPolicy:
