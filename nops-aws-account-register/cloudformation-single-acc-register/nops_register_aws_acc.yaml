@@ -352,7 +352,7 @@ Resources:
         Statement: 
               - Action:                 
                   - cur:DescribeReportDefinitions
-                  - cur:DeleteReportDefinition                  
+                  - cur:DeleteReportDefinition
                   - cur:PutReportDefinition
                   - events:CreateEventBus
                   - organizations:AcceptHandshake

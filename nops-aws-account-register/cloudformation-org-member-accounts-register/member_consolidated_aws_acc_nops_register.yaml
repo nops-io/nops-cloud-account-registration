@@ -271,6 +271,7 @@ Resources:
                   - cur:DescribeReportDefinitions
                   - cur:DeleteReportDefinition                  
                   - cur:PutReportDefinition
+                  - cur:DeleteReportDefinition
                   - events:CreateEventBus
                   - organizations:AcceptHandshake
                   - organizations:CancelHandshake
@@ -278,7 +279,7 @@ Resources:
                   - organizations:InviteAccountToOrganization
                   - organizations:MoveAccount
                   - s3:HeadBucket
-                  - s3:HeadObject
+                  - s3:HeadObject                  
                   - support:DescribeTrustedAdvisorCheckRefreshStatuses
                   - support:DescribeTrustedAdvisorCheckResult
                   - support:DescribeTrustedAdvisorChecks
