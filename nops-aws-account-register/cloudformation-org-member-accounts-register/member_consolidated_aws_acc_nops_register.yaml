@@ -276,7 +276,7 @@ Resources:
       - LambdaFetchAlias
 
   TriggerLambdaFetchAlias:
-    Type: Custom::TriggerLambdaGenUUID
+    Type: Custom::TriggerLambdaFetchAlias
     Properties:
       ServiceToken : !GetAtt [ LambdaFetchAlias, Arn ]
     DependsOn: 
