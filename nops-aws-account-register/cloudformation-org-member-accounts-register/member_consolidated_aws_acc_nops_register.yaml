@@ -19,7 +19,7 @@ Parameters:
 
   pGithubReleaseVersion:
     Type: String
-    Default: v0.1.7
+    Default: v0.1.8
     Description: github release version.
 
 Resources:
@@ -181,6 +181,14 @@ Resources:
       SourceZipUrl: !Sub "https://github.com/nops-io/nops-cloud-account-registration/releases/download/${pGithubReleaseVersion}/nops_register_aws_acc-${pGithubReleaseVersion}.zip"
       PackageFileName: !Sub "nops_register_aws_acc-${pGithubReleaseVersion}.zip"
 
+  rTriggerCopyFetchAliasPackage:
+    Type: Custom::ForwarderZip
+    Properties:
+      ServiceToken: !GetAtt "rZipCopierLambdaFunction.Arn"
+      DestZipsBucket: !Ref "rNopsDistBucket"
+      SourceZipUrl: !Sub "https://github.com/nops-io/nops-cloud-account-registration/releases/download/${pGithubReleaseVersion}/fetch_aws_account_alias-${pGithubReleaseVersion}.zip"
+      PackageFileName: !Sub "fetch_aws_account_alias-${pGithubReleaseVersion}.zip"
+
   nopsLambdaExecutionRole: 
     Type: "AWS::IAM::Role"
     Properties: 
@@ -239,6 +247,41 @@ Resources:
     DependsOn: 
       - PermissionLambdaGenUUID
 
+  LambdaFetchAlias:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      Code:
+        S3Bucket: !Ref "rNopsDistBucket"
+        S3Key: !Sub "fetch_aws_account_alias-${pGithubReleaseVersion}.zip"
+      PackageType: Zip
+      Handler: "fetch_aws_account_alias.cloudformation_handler"
+      Role: !GetAtt nopsLambdaExecutionRole.Arn
+      Runtime: "python3.9"
+      Timeout: 20
+      FunctionName: "fetch_aws_account_alias"
+    DependsOn: 
+      - nopsLambdaExecutionRole
+      - rTriggerCopyAccRegPackage
+      - rTriggerCopyGenUUIDPackage
+      - rTriggerCopyFetchAliasPackage
+
+  PermissionLambdaFetchAlias:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      Action: 'lambda:InvokeFunction'
+      FunctionName: !GetAtt [ LambdaFetchAlias, Arn ]
+      Principal: 'cloudformation.amazonaws.com'
+      SourceAccount: !Ref "AWS::AccountId"
+    DependsOn: 
+      - LambdaFetchAlias
+
+  TriggerLambdaFetchAlias:
+    Type: Custom::TriggerLambdaGenUUID
+    Properties:
+      ServiceToken : !GetAtt [ LambdaFetchAlias, Arn ]
+    DependsOn: 
+      - PermissionLambdaFetchAlias
+
   nopsAccessIamRole: 
     Type: "AWS::IAM::Role"
     DependsOn: 
@@ -271,7 +314,6 @@ Resources:
                   - cur:DescribeReportDefinitions
                   - cur:DeleteReportDefinition                  
                   - cur:PutReportDefinition
-                  - cur:DeleteReportDefinition
                   - events:CreateEventBus
                   - organizations:AcceptHandshake
                   - organizations:CancelHandshake
@@ -516,7 +558,7 @@ Resources:
           external_id: !GetAtt TriggerLambdaGenUUID.external_id
           private_key: !Ref nOpsPrivateKey
           iam_role_for_nops: !GetAtt nopsAccessIamRole.Arn
-          aws_acc_name_to_register_in_nops: !Sub '${AccNameToRegister}-${AWS::AccountId}'
+          aws_acc_name_to_register_in_nops: !Join [ "-", [!GetAtt TriggerLambdaFetchAlias.acc_alias, !Ref "AWS::AccountId" ]]
           is_member_acc: "True"
     DependsOn: 
       - nopsLambdaExecutionRole

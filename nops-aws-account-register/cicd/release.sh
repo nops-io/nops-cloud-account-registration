@@ -15,6 +15,8 @@ gh release create --title aws-account-register-${VERSION} ${VERSION} \
   cloudformation_execution_role-${VERSION}.yaml \
   generate_external_id.zip \
   generate_external_id-${VERSION}.zip \
+  fetch_aws_account_alias.zip \
+  fetch_aws_account_alias-${VERSION}.zip \
   nops_register_aws_acc.zip \
   nops_register_aws_acc-${VERSION}.zip \
   
