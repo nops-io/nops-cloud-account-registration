@@ -19,7 +19,7 @@ Parameters:
 
   pGithubReleaseVersion:
     Type: String
-    Default: v0.1.7
+    Default: v0.1.8
     Description: github release version.
 
 Resources:
@@ -271,7 +271,6 @@ Resources:
                   - cur:DescribeReportDefinitions
                   - cur:DeleteReportDefinition                  
                   - cur:PutReportDefinition
-                  - cur:DeleteReportDefinition
                   - events:CreateEventBus
                   - organizations:AcceptHandshake
                   - organizations:CancelHandshake
@@ -479,23 +478,6 @@ Resources:
                   - workmail:ListUsers
                 Effect: Deny
                 Resource: "*"
-      Roles: [!Ref nopsAccessIamRole]
-
-  nopsSystemBucketPolicy:
-    Type: AWS::IAM::Policy
-    Properties:
-      PolicyName: NopsSystemBucketPolicy
-      PolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: Allow
-            Action:
-              - s3:*
-            Resource:
-              - !Sub "arn:aws:s3:::${SystemBucketID}"
-              - !Sub "arn:aws:s3:::${SystemBucketID}/*"
-              - !Sub "arn:aws:s3:::${SystemBucketID}-nops-${AWS::AccountId}"
-              - !Sub "arn:aws:s3:::${SystemBucketID}-nops-${AWS::AccountId}/*"
       Roles: [!Ref nopsAccessIamRole]
 
   LambdaRegisterAwsAcc:
