@@ -18,7 +18,7 @@ gh release create --title aws-account-register-${VERSION} ${VERSION} \
   fetch_aws_account_alias.zip \
   fetch_aws_account_alias-${VERSION}.zip \  
   nops_register_aws_acc.zip \
-  nops_register_aws_acc-${VERSION}.zip \
+  nops_register_aws_acc-${VERSION}.zip
   
 cd -
 
