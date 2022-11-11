@@ -21,6 +21,7 @@ declare -a LAMBDA_PACKAGES
 LAMBDA_PACKAGES=(
   generate_external_id 
   nops_register_aws_acc
+  fetch_aws_account_alias
 )
 
 for LAMBDA_PACKAGE in "${LAMBDA_PACKAGES[@]}"
