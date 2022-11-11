@@ -506,7 +506,6 @@ Resources:
       - rTriggerCopyAccRegPackage
       - rTriggerCopyGenUUIDPackage
 
-
   PermissionLambdaRegisterAwsAcc:
     Type: "AWS::Lambda::Permission"
     Properties:
