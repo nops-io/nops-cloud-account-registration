@@ -19,7 +19,7 @@ Parameters:
 
   pGithubReleaseVersion:
     Type: String
-    Default: v0.1.8
+    Default: v0.1.9
     Description: github release version.
 
 Resources:
@@ -505,7 +505,6 @@ Resources:
       - nopsAccessIamRole
       - rTriggerCopyAccRegPackage
       - rTriggerCopyGenUUIDPackage
-
 
   PermissionLambdaRegisterAwsAcc:
     Type: "AWS::Lambda::Permission"
