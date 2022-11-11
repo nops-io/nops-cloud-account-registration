@@ -5,10 +5,10 @@ from cfnresponse import send, SUCCESS
 def get_alias():
     ALIAS = boto3.client('iam').list_account_aliases()['AccountAliases']
     ID = boto3.client('sts').get_caller_identity().get('Account')
-    if ALIAS == []:
-        return ID
-    else:
+    if ALIAS:
         return ALIAS[0]
+    else:
+        return ID
 
 def cloudformation_handler(event, context):
     if event['RequestType'] == 'Create':
