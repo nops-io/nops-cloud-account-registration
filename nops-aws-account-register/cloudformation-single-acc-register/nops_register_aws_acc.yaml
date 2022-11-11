@@ -294,6 +294,7 @@ Resources:
                   - "logs:CreateLogGroup"
                   - "logs:CreateLogStream"
                   - "logs:PutLogEvents"
+                  - "iam:ListAccountAliases"
                 Resource: "*"
 
   LambdaGenUUID:
