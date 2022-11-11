@@ -34,7 +34,7 @@ Parameters:
 
   pGithubReleaseVersion:
     Type: String
-    Default: v0.1.8
+    Default: v0.1.9
     Description: github release version.
 
 Resources:
@@ -574,8 +574,8 @@ Resources:
             Action:
               - s3:*
             Resource:
-              - !Sub '${BucketName}-${AWS::AccountId}'
-              - !Sub '${BucketName}-${AWS::AccountId}/*'
+              - !Sub 'arn:aws:s3:::${BucketName}-${AWS::AccountId}'
+              - !Sub 'arn:aws:s3:::${BucketName}-${AWS::AccountId}/*'
       Roles: [!Ref nopsAccessIamRole]
 
   LambdaRegisterAwsAcc:
