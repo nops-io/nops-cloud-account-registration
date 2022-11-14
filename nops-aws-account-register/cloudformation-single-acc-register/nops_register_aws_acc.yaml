@@ -34,7 +34,7 @@ Parameters:
 
   pGithubReleaseVersion:
     Type: String
-    Default: v0.1.9
+    Default: v0.1.10
     Description: github release version.
 
 Resources:
@@ -342,6 +342,11 @@ Resources:
       ManagedPolicyArns: [
         "arn:aws:iam::aws:policy/ReadOnlyAccess"
       ]
+      Tags:
+        - Key: version
+          Value: 1.0.9
+        - Key: createdat
+          Value: 20221022
 
   nopsIntegrationPolicy:
     Type: AWS::IAM::Policy
