@@ -8,10 +8,14 @@ This document contains the descriptions of the files and folders in `nops-aws-ac
 
 ## cloudformation-single-acc-register
 
-This folder contains _CloudFormation_ template to register a single AWS account, or AWS Organization master payer account, with nOps.
+This [folder](https://github.com/nops-io/nops-cloud-account-registration/tree/main/nops-aws-account-register/cloudformation-single-acc-register) contains _CloudFormation_ template to register a single AWS account, or AWS Organization master payer account, with nOps.
+- **AWS Cloudformation** -> **stacks** -> [nops_register_aws_acc.yaml](https://github.com/nops-io/nops-cloud-account-registration/blob/main/nops-aws-account-register/cloudformation-single-acc-register/nops_register_aws_acc.yaml)
+- Add Parameters, for API/Private Key, check Prerequisite 
 
 ## cloudformation-org-member-accounts-register
-This folder contains _CloudFormation_ templates to register multiple AWS organization member accounts to nOps.
+This [folder](https://github.com/nops-io/nops-cloud-account-registration/tree/main/nops-aws-account-register/cloudformation-org-member-accounts-register) contains _CloudFormation_ templates to register multiple AWS organization member accounts to nOps.
+- **AWS Cloudformation** -> **stacksets** -> [member_consolidated_aws_acc_nops_register.yaml](https://github.com/nops-io/nops-cloud-account-registration/blob/main/nops-aws-account-register/cloudformation-org-member-accounts-register/member_consolidated_aws_acc_nops_register.yaml)
+- Add Parameters, for API/Private Key, check Prerequisite
 
 ## lambda_functions
 This folder contains the Python code for the lambda function that registers AWS accounts to nOps.
@@ -20,3 +24,5 @@ This folder contains the Python code for the lambda function that registers AWS 
 This folder contains a _Terraform_ module that deploys _CloudFormation_ stacksets.
 
 _CloudFormation_ stacksets deploys the _CloudFormation_ template for all accounts defined in the organizational unit (OU).
+
+Terraform: [Adding Multiple AWS Accounts to nOps with Terraform](https://docs.nops.io/en/articles/6464661-adding-multiple-aws-accounts-to-nops-with-terraform)
