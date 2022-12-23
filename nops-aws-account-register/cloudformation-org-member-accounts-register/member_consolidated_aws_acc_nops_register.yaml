@@ -19,7 +19,7 @@ Parameters:
 
   pGithubReleaseVersion:
     Type: String
-    Default: v0.1.11
+    Default: v0.1.12
     Description: github release version.
 
 Resources:
@@ -276,12 +276,7 @@ Resources:
                   - cur:DescribeReportDefinitions
                   - cur:DeleteReportDefinition                  
                   - cur:PutReportDefinition
-                  - events:CreateEventBus
-                  - organizations:AcceptHandshake
-                  - organizations:CancelHandshake
-                  - organizations:DeclineHandshake
                   - organizations:InviteAccountToOrganization
-                  - organizations:MoveAccount
                   - s3:HeadBucket
                   - s3:HeadObject                  
                   - support:DescribeTrustedAdvisorCheckRefreshStatuses
@@ -483,6 +478,19 @@ Resources:
                   - workmail:ListUsers
                 Effect: Deny
                 Resource: "*"
+      Roles: [!Ref nopsAccessIamRole]
+
+  nopsEventBridgeIntegrationPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: NopsEventBridgeIntegrationPolicy
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Action:
+            - events:CreateEventBus
+            Effect: Allow
+            Resource: "*"
       Roles: [!Ref nopsAccessIamRole]
 
   LambdaRegisterAwsAcc:
