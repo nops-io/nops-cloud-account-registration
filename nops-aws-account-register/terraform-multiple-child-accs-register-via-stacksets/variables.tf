@@ -12,14 +12,14 @@ variable "ReportName" {
 
 variable "s3prefix" {
   type        = string
-  default     = "something"
+  default     = "nOpsbilling"
   description = "nOps daily generated reports folder prefix"
 }
 
 variable "BucketName" {
   type        = string
-  default     = "nopsbucketforlogs"
-  description = "s3 bucket name for nOps daily reports"
+  default     = "nopsbucketforcostusagereports"
+  description = "s3 bucket name for nOps daily cost usage reports (CUR)."
 }
 
 variable "nOpsApiKey" {
@@ -31,24 +31,18 @@ variable "nOpsApiKey" {
 variable "nOpsPrivateKey" {
   type        = string
   sensitive   = true
-  default     = ""
   description = "nOps private key to generate signature for api request, it should be single line string (optional)."
 }
 
-variable "AccNameToRegister" {
+variable "AccNamePreFixToRegister" {
   type        = string
-  description = "Account name to register in nOps."
-}
-
-variable "master_payer_acc_template_url" {
-  type        = string
-  default     = "https://nops-register-aws-account-us-east-1.s3.amazonaws.com/nops_register_aws_acc-v0.1.11.yaml"
-  description = "CloudFormation template url for consolidated billing master payer AWS account."
+  default     = "child"
+  description = "Account name to register in nOps, Default it will be child-<account id>, and if value is provided then it will be <value provided>-<account id>."
 }
 
 variable "member_acc_template_url" {
   type        = string
-  default     = "https://nops-register-aws-account-us-east-1.s3.amazonaws.com/member_consolidated_aws_acc_nops_register-v0.1.11.yaml"
+  default     = "https://nops-register-aws-account-us-east-1.s3.amazonaws.com/member_consolidated_aws_acc_nops_register-v0.3.0.yaml"
   description = "CloudFormation template url for member accounts."
 }
 
@@ -60,9 +54,4 @@ variable "list_of_OU_ids" {
 variable "org_root_id" {
   type        = list(string)
   description = "AWS Organization root id for CloudFormation stackset execution role."
-}
-
-variable "master_payer_acc_id" {
-  type        = string
-  description = "AWS org Consolidated billing master payer account id."
 }

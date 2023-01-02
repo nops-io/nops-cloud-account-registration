@@ -6,17 +6,20 @@ variable "tags" {
 
 variable "ReportName" {
   type        = string
+  default     = "nopsbilling-daily-gzip"
   description = "nOps daily generated report name"
 }
 
 variable "s3prefix" {
   type        = string
+  default     = "nOpsbilling"
   description = "nOps daily generated reports folder prefix"
 }
 
 variable "BucketName" {
   type        = string
-  description = "s3 bucket name for nOps daily reports"
+  default     = "nopsbucketforcostusagereports"
+  description = "s3 bucket name for nOps daily cost usage reports (CUR)."
 }
 
 variable "nOpsApiKey" {
@@ -31,9 +34,10 @@ variable "nOpsPrivateKey" {
   description = "nOps private key to generate signature for api request, It must be single line string (optional)."
 }
 
-variable "AccNameToRegister" {
+variable "AccNamePreFixToRegister" {
   type        = string
-  description = "Account name to register in nOps."
+  default     = "child"
+  description = "Account name to register in nOps, Default it will be child-<account id>, and if value is provided then it will be <value provided>-<account id>."
 }
 
 variable "list_of_OU_ids" {
@@ -46,7 +50,3 @@ variable "org_root_id" {
   description = "AWS Organization root id."
 }
 
-variable "master_payer_acc_id" {
-  type        = string
-  description = "AWS org Consolidated billing master payer account id."
-}

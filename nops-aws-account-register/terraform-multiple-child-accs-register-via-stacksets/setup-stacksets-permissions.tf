@@ -73,7 +73,13 @@ resource "aws_cloudformation_stack_set_instance" "execution_role_creation" {
 
   region         = data.aws_region.current.name
   stack_set_name = aws_cloudformation_stack_set.execution_role_creation.name
+
+  operation_preferences {
+    failure_tolerance_percentage = "25"
+    max_concurrent_percentage = "100"
+  }
   depends_on = [
-    aws_cloudformation_stack.execution_role_creation
+    aws_cloudformation_stack.execution_role_creation,
+    aws_cloudformation_stack_set.execution_role_creation
   ]
 }
