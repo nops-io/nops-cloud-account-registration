@@ -20,9 +20,13 @@ This [folder](https://github.com/nops-io/nops-cloud-account-registration/tree/ma
 ## lambda_functions
 This folder contains the Python code for the lambda function that registers AWS accounts to nOps.
 
-## terraform-multi-acc-register-via-stacksets
+## terraform-master-payer-register
+This folder contains a _Terraform_ module that deploys a _CloudFormation_ stack.
+
+This should be deployed on single aws account or organization's master payer account only.
+## terraform-multiple-child-accs-register-via-stacksets
 This folder contains a _Terraform_ module that deploys _CloudFormation_ stacksets.
 
-_CloudFormation_ stacksets deploys the _CloudFormation_ template for all accounts defined in the organizational unit (OU).
+_CloudFormation_ stacksets deploys the _CloudFormation_ template for all child accounts defined in the organizational unit (OU).
 
 Terraform: [Adding Multiple AWS Accounts to nOps with Terraform](https://docs.nops.io/en/articles/6464661-adding-multiple-aws-accounts-to-nops-with-terraform)
