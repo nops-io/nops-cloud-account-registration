@@ -7,9 +7,10 @@ Parameters:
     NoEcho: true
     Description: nOps api key to register AWS accounts.
 
-  AccNameToRegister:
+  AccNamePreFixToRegister:
     Type: String
-    Description: Account name to register in nOps.
+    Default: child
+    Description: Account name to register in nOps, Default it will be child-<account id>, and if value is provided then it will be <value provided>-<account id>.
 
   nOpsPrivateKey:
     Type: String
@@ -19,7 +20,7 @@ Parameters:
 
   pGithubReleaseVersion:
     Type: String
-    Default: v0.1.0
+    Default: v0.3.0
     Description: github release version.
 
 Resources:
@@ -256,112 +257,234 @@ Resources:
               StringEquals:
                   sts:ExternalId: !GetAtt TriggerLambdaGenUUID.external_id
       Path: "/"
-      Policies: 
-        - PolicyName: "InlinePolicy"
-          PolicyDocument: 
-            Version: "2012-10-17"
-            Statement: 
-              - Effect: "Allow"
-                Action: 
-                  - "autoscaling:DescribeAutoScalingGroups"
-                  - "ce:GetCostAndUsage"
-                  -  "ce:GetReservationPurchaseRecommendation"
-                  -  "ce:GetRightsizingRecommendation"
-                  -  "ce:GetSavingsPlansPurchaseRecommendation"
-                  -  "cloudformation:DescribeStackResources"
-                  -  "cloudformation:DescribeStacks"
-                  -  "cloudformation:GetTemplate"
-                  -  "cloudfront:ListDistributions"
-                  -  "cloudtrail:DescribeTrails"
-                  -  "cloudtrail:GetTrailStatus"
-                  -  "cloudtrail:LookupEvents"
-                  -  "cloudwatch:DescribeAlarms"
-                  -  "cloudwatch:GetMetricStatistics"
-                  -  "cloudwatch:ListMetrics"
-                  -  "config:DescribeConfigurationRecorderStatus"
-                  -  "config:DescribeConfigurationRecorders"
-                  -  "config:DescribeDeliveryChannelStatus"
-                  -  "config:DescribeDeliveryChannels"
-                  -  "cur:DescribeReportDefinitions"
-                  -  "cur:PutReportDefinition"
-                  -  "dynamodb:DescribeContinuousBackups"
-                  -  "dynamodb:DescribeTable"
-                  -  "dynamodb:ListTables"
-                  -  "ec2:DescribeAddresses"
-                  -  "ec2:DescribeClientVpnConnections"
-                  -  "ec2:DescribeImages"
-                  -  "ec2:DescribeInstanceAttribute"
-                  -  "ec2:DescribeInstanceStatus"
-                  -  "ec2:DescribeInstances"
-                  -  "ec2:DescribeFlowLogs"
-                  -  "ec2:DescribeNatGateways"
-                  -  "ec2:DescribeNetworkInterfaces"
-                  -  "ec2:DescribeReservedInstances"
-                  -  "ec2:DescribeReservedInstancesOfferings"
-                  -  "ec2:DescribeRouteTables"
-                  -  "ec2:DescribeSecurityGroups"
-                  -  "ec2:DescribeSnapshots"
-                  -  "ec2:DescribeSubnets"
-                  -  "ec2:DescribeVolumes"
-                  -  "ec2:DescribeVpcs"
-                  -  "ecs:DescribeClusters"
-                  -  "ecs:ListClusters"
-                  -  "eks:ListClusters"
-                  -  "elasticache:DescribeCacheClusters"
-                  -  "elasticache:DescribeCacheSubnetGroups"
-                  -  "elasticache:DescribeReplicationGroups"
-                  -  "elasticfilesystem:DescribeFileSystems"
-                  -  "elasticloadbalancing:DescribeLoadBalancers"
-                  -  "elb:DescribeLoadBalancers"
-                  -  "es:DescribeElasticsearchDomains"
-                  -  "guardduty:ListDetectors"
-                  -  "iam:GetAccessKeyLastUsed"
-                  -  "iam:GetAccountPasswordPolicy"
-                  -  "iam:GetAccountSummary"
-                  -  "iam:GetLoginProfile"
-                  -  "iam:GetRole"
-                  -  "iam:ListAccessKeys"
-                  -  "iam:ListAccountAliases"
-                  -  "iam:ListAttachedGroupPolicies"
-                  -  "iam:ListAttachedUserPolicies"
-                  -  "iam:ListGroupsForUser"
-                  -  "iam:ListMFADevices"
-                  -  "iam:ListRoles"
-                  -  "iam:ListUserPolicies"
-                  -  "iam:ListUsers"
-                  -  "inspector:ListAssessmentRuns"
-                  -  "kms:ListKeys"
-                  -  "lambda:GetFunction"
-                  -  "lambda:GetPolicy"
-                  -  "lambda:ListFunctions"
-                  -  "rds:DescribeDBInstances"
-                  -  "rds:DescribeDBSnapshots"
-                  -  "rds:DescribePendingMaintenanceActions"
-                  -  "rds:ListTagsForResource"
-                  -  "redshift:DescribeClusters"
-                  -  "s3:GetBucketAcl"
-                  -  "s3:GetBucketLogging"
-                  -  "s3:GetBucketPolicy"
-                  -  "s3:GetBucketPolicyStatus"
-                  -  "s3:GetBucketPublicAccessBlock"
-                  -  "s3:GetBucketVersioning"
-                  -  "s3:GetEncryptionConfiguration"
-                  -  "s3:ListAllMyBuckets"
-                  -  "ssm:ListComplianceSummaries"
-                  -  "support:DescribeCases"
-                  -  "support:DescribeTrustedAdvisorCheckRefreshStatuses"
-                  -  "support:DescribeTrustedAdvisorCheckResult"
-                  -  "support:DescribeTrustedAdvisorChecks"
-                  -  "tag:getResources"
-                  -  "tag:getTagKeys"
-                  -  "tag:getTagValues"
-                  -  "wellarchitected:*"
-                  -  "workspaces:DescribeWorkspaceDirectories"
-                  -  "workspaces:DescribeWorkspaces"
-                  -  "ec2:DescribeReservedInstances"
-                  -  "elasticloadbalancing:DescribeTargetGroups"
-                  -  "iam:ListInstanceProfiles"
-                Resource: '*'
+      ManagedPolicyArns: [
+        "arn:aws:iam::aws:policy/ReadOnlyAccess"
+      ]
+      Tags:
+        - Key: version
+          Value: 1.0.9
+        - Key: createdat
+          Value: 20221022
+
+  nopsIntegrationPolicy:
+    Type: AWS::IAM::Policy
+    Properties:     
+      PolicyName: "InlinePolicy"
+      PolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+              - Action:                 
+                  - cur:DescribeReportDefinitions
+                  - cur:DeleteReportDefinition                  
+                  - cur:PutReportDefinition
+                  - events:CreateEventBus
+                  - organizations:AcceptHandshake
+                  - organizations:CancelHandshake
+                  - organizations:DeclineHandshake
+                  - organizations:InviteAccountToOrganization
+                  - organizations:MoveAccount
+                  - s3:HeadBucket
+                  - s3:HeadObject                  
+                  - support:DescribeTrustedAdvisorCheckRefreshStatuses
+                  - support:DescribeTrustedAdvisorCheckResult
+                  - support:DescribeTrustedAdvisorChecks
+                  - wellarchitected:*
+                Effect: "Allow"
+                Resource: "*"
+              - Action:
+                  - acm-pca:Describe*
+                  - acm-pca:Get*
+                  - acm-pca:List*
+                  - acm:Describe*
+                  - acm:Get*
+                  - acm:List*
+                  - apigateway:GET
+                  - appconfig:GetConfiguration*
+                  - appflow:DescribeConnector*
+                  - appflow:ListConnector*
+                  - appstream:DescribeDirectoryConfigs
+                  - appstream:DescribeUsers
+                  - appstream:DescribeSessions
+                  - appsync:Get*
+                  - appsync:List*
+                  - athena:Get*
+                  - athena:List*
+                  - backup:GetBackupVaultAccessPolicy
+                  - cassandra:Select
+                  - chime:Describe*
+                  - chime:Get*
+                  - chime:List*
+                  - cloud9:Describe*
+                  - cloud9:Get*
+                  - cloud9:List*
+                  - clouddirectory:Get*
+                  - clouddirectory:List*
+                  - cloudfront:GetCloudFrontOriginAccessIdentity 
+                  - cloudfront:GetFieldLevelEncryption*
+                  - cloudfront:GetKeyGroupConfig
+                  - cloudwatch:GetMetricData
+                  - cloudwatch:GetMetricStream
+                  - cloudwatch:ListMetricStreams
+                  - codeartifact:GetAuthorizationToken
+                  - codeartifact:ReadFromRepository 
+                  - codebuild:BatchGet*
+                  - codebuild:ListSourceCredentials
+                  - codecommit:BatchGet*
+                  - codecommit:Get*
+                  - codecommit:GitPull
+                  - codedeploy:BatchGet*
+                  - codedeploy:Get*
+                  - codestar:DescribeUserProfile
+                  - codestar:ListUserProfiles
+                  - cognito-identity:*
+                  - cognito-idp:*
+                  - cognito-sync:*
+                  - comprehend:Describe*
+                  - comprehend:List*
+                  - config:BatchGetAggregateResourceConfig
+                  - config:BatchGetResourceConfig
+                  - config:SelectAggregateResourceConfig
+                  - config:SelectResourceConfig
+                  - connect:Describe*
+                  - connect:Get*
+                  - connect:List*
+                  - datapipeline:DescribeObjects
+                  - datapipeline:EvaluateExpression
+                  - datapipeline:QueryObjects
+                  - dax:BatchGetItem
+                  - dax:GetItem
+                  - dax:Query
+                  - deepcomposer:Get*
+                  - deepcomposer:List*
+                  - devicefarm:GetRemoteAccessSession
+                  - devicefarm:ListRemoteAccessSessions
+                  - directconnect:Describe*
+                  - directconnect:List*
+                  - discovery:Describe*
+                  - discovery:Get*
+                  - discovery:List*
+                  - dms:Describe*
+                  - dms:List*
+                  - ds:Get*
+                  - dynamodb:GetItem
+                  - dynamodb:BatchGetItem
+                  - dynamodb:Query
+                  - dynamodb:Scan
+                  - ec2:GetConsoleScreenshot
+                  - ecr:BatchGetImage
+                  - ecr:GetAuthorizationToken
+                  - ecr:GetDownloadUrlForLayer
+                  - ecr-public:GetAuthorizationToken
+                  - eks:DescribeIdentityProviderConfig
+                  - elasticbeanstalk:DescribeConfigurationOptions
+                  - elasticbeanstalk:DescribeConfigurationSettings
+                  - es:ESHttpGet*
+                  - fis:GetExperimentTemplate
+                  - fms:GetAdminAccount
+                  - frauddetector:BatchGetVariable
+                  - frauddetector:Get*
+                  - gamelift:GetGameSessionLogUrl
+                  - gamelift:GetInstanceAccess
+                  - geo:ListDevicePositions
+                  - glue:GetSecurityConfiguration*
+                  - glue:SearchTables
+                  - glue:GetTable*
+                  - guardduty:GetIPSet
+                  - guardduty:GetMasterAccount
+                  - guardduty:GetMembers
+                  - guardduty:ListMembers
+                  - guardduty:ListOrganizationAdminAccounts
+                  - inspector2:GetConfiguration
+                  - imagebuilder:GetImage
+                  - iotroborunner:Get*
+                  - iotsitewise:ListAccessPolicies
+                  - ivs:GetPlaybackKeyPair
+                  - ivs:GetStreamSession
+                  - kafka:GetBootstrapBrokers
+                  - kendra:Query*
+                  - kinesis:Get*
+                  - kms:DescribeKey
+                  - kms:GetPublicKey
+                  - lex:Get*
+                  - lambda:GetFunctionConfiguration
+                  - license-manager:GetGrant
+                  - license-manager:GetLicense
+                  - license-manager:ListTokens
+                  - lightsail:GetBucketAccessKeys
+                  - lightsail:GetCertificates
+                  - lightsail:GetContainerImages
+                  - lightsail:GetKeyPair
+                  - lightsail:GetRelationalDatabaseLogStreams
+                  - logs:GetLogEvents
+                  - logs:StartQuery
+                  - machinelearning:GetMLModel
+                  - macie2:GetAdministratorAccount
+                  - macie2:GetMember
+                  - macie2:GetMacieSession
+                  - macie2:SearchResources
+                  - macie2:GetSensitiveDataOccurrences
+                  - mobilehub:ExportProject
+                  - nimble:GetStreamingSession
+                  - polly:SynthesizeSpeech
+                  - proton:GetEnvironmentTemplate
+                  - proton:GetServiceTemplate
+                  - proton:ListServiceTemplates
+                  - proton:ListEnvironmentTemplates
+                  - qldb:GetBlock
+                  - qldb:GetDigest
+                  - rds:Download*
+                  - rekognition:CompareFaces
+                  - rekognition:Detect*
+                  - rekognition:Search*
+                  - resiliencehub:DescribeAppVersionTemplate
+                  - resiliencehub:ListRecommendationTemplates
+                  - robomaker:GetWorldTemplateBody
+                  - s3-object-lambda:GetObject
+                  - sagemaker:Search
+                  - schemas:GetDiscoveredSchema
+                  - sdb:Get*
+                  - sdb:Select*
+                  - secretsmanager:*
+                  - securityhub:GetFindings
+                  - securityhub:GetMembers
+                  - securityhub:ListMembers
+                  - ses:GetTemplate
+                  - ses:GetEmailTemplate
+                  - ses:GetContact
+                  - ses:GetContactList
+                  - ses:ListTemplates
+                  - ses:ListEmailTemplates
+                  - ses:ListVerifiedEmailAddresses
+                  - signer:GetSigningProfile
+                  - signer:ListProfilePermissions
+                  - signer:ListSigningProfiles
+                  - sms-voice:DescribeKeywords
+                  - sms-voice:DescribeOptedOutNumbers
+                  - sms-voice:DescribePhoneNumbers
+                  - sms-voice:DescribePools
+                  - snowball:Describe*
+                  - sqs:Receive*
+                  - ssm-contacts:*
+                  - ssm:DescribeParameters*
+                  - ssm:GetParameter*
+                  - sso:Describe*
+                  - sso:Get*
+                  - sso:List*
+                  - storagegateway:DescribeChapCredentials
+                  - support:DescribeCommunications
+                  - timestream:ListDatabases
+                  - timestream:ListTables
+                  - transcribe:Get*
+                  - transcribe:List*
+                  - transfer:Describe*
+                  - transfer:List*
+                  - waf-regional:GetChangeToken
+                  - workmail:DescribeUser
+                  - workmail:GetMailUserDetails
+                  - workmail:ListUsers
+                Effect: Deny
+                Resource: "*"
+      Roles: [!Ref nopsAccessIamRole]
 
   LambdaRegisterAwsAcc:
     Type: "AWS::Lambda::Function"
@@ -381,14 +504,13 @@ Resources:
           external_id: !GetAtt TriggerLambdaGenUUID.external_id
           private_key: !Ref nOpsPrivateKey
           iam_role_for_nops: !GetAtt nopsAccessIamRole.Arn
-          aws_acc_name_to_register_in_nops: !Sub '${AccNameToRegister}-${AWS::AccountId}'
+          aws_acc_name_to_register_in_nops: !Sub '${AccNamePreFixToRegister}-${AWS::AccountId}'
           is_member_acc: "True"
     DependsOn: 
       - nopsLambdaExecutionRole
       - nopsAccessIamRole
       - rTriggerCopyAccRegPackage
       - rTriggerCopyGenUUIDPackage
-
 
   PermissionLambdaRegisterAwsAcc:
     Type: "AWS::Lambda::Permission"
