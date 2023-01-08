@@ -2,6 +2,10 @@
 
 This Terraform module creates CloudFormation stack and creates resources required to register AWS accounts to nOps.
 
+Before you continue, make sure that:
+- You are logged into your AWS Payer account, or the sinlge member account that you want to onboard.
+- You possess the nOps API Key and nOps Private Key. 
+
 ## Usage
 ```hcl
     module "register_aws_acc_to_nops" {
@@ -12,7 +16,7 @@ This Terraform module creates CloudFormation stack and creates resources require
     }
 ```
 
-Inside the `nops-cloud-account-registration/tree/main/nops-aws-account-register/terraform-master-payer-register` directory, run —
+Downlaod this repository, and inside the `nops-cloud-account-registration/tree/main/nops-aws-account-register/terraform-master-payer-register` directory, run —
 
 - terraform init
 - terraform plan
