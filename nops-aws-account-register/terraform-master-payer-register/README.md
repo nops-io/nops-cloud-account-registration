@@ -22,11 +22,11 @@ Downlaod this repository, and inside the `nops-cloud-account-registration/tree/m
 - terraform plan
 - terraform apply
 
-This will start the onboarding process. You can monitor the progress from the terminal where you ran the Terraform commands or you can also monitor the progress from the AWS CloudFormation console. 
+This will start the onboarding process. You can monitor the progress from the terminal where you ran the Terraform commands or you can also monitor the progress from the AWS CloudFormation console. In the CloudFormation console, find the stack with the name master-payer-nops-account-register, open it and go to the Stack Instances tab to see the progress.
 
 After a few minutes stack should be in state “CURRENT”.
 
-In the CloudFormation console, find the stack with the name master-payer-nops-account-register, open it and go to the Stack Instances tab.
+To learn more, see [documentation](https://docs.nops.io/en/articles/6464661-adding-multiple-aws-accounts-to-nops-with-terraform)
 
 ## Requirements
 
