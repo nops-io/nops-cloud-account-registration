@@ -22,11 +22,6 @@ Parameters:
     NoEcho: true
     Description: nOps api key to register AWS accounts.
 
-  AccNamePreFixToRegister:
-    Type: String
-    Default: master-payer
-    Description: Account name to register in nOps, Default it will be master-payer-<account id>, and if value is provided then it will be <value provided>-<account id>.
-
   nOpsPrivateKey:
     Type: String
     NoEcho: true
@@ -35,7 +30,7 @@ Parameters:
 
   pGithubReleaseVersion:
     Type: String
-    Default: v0.3.0
+    Default: v0.3.1
     Description: github release version.
 
 Resources:
@@ -605,7 +600,7 @@ Resources:
           private_key: !Ref nOpsPrivateKey
           iam_role_for_nops: !GetAtt nopsAccessIamRole.Arn
           s3_bucket_name_for_nops: !Sub '${BucketName}-${AWS::AccountId}'
-          aws_acc_name_to_register_in_nops: !Sub '${AccNamePreFixToRegister}-${AWS::AccountId}'
+          aws_acc_name_to_register_in_nops: !Sub 'master-payer-${AWS::AccountId}'
     DependsOn: 
       - nopsLambdaExecutionRole
       - nopsAccessIamRole
