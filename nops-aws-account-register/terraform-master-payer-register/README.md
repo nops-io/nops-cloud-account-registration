@@ -52,7 +52,6 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_AccNamePreFixToRegister"></a> [AccNamePreFixToRegister](#input\_AccNamePreFixToRegister) | Account name to register in nOps, Default it will be master-payer-<account id>, and if value is provided then it will be <value provided>-<account id>. | `string` | `"master-payer"` | no |
 | <a name="input_BucketName"></a> [BucketName](#input\_BucketName) | s3 bucket name for nOps daily cost usage reports (CUR). | `string` | `"nopsbucketforcostusagereports"` | no |
 | <a name="input_ReportName"></a> [ReportName](#input\_ReportName) | nOps daily generated report name | `string` | `"nopsbilling-daily-gzip"` | no |
 | <a name="input_master_payer_acc_template_url"></a> [master\_payer\_acc\_template\_url](#input\_master\_payer\_acc\_template\_url) | CloudFormation template url for consolidated billing master payer AWS account. | `string` | `"https://nops-register-aws-account-us-east-1.s3.amazonaws.com/nops_register_aws_acc.yaml"` | no |
