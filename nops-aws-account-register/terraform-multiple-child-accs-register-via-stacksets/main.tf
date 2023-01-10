@@ -16,7 +16,6 @@ resource "aws_cloudformation_stack_set" "member_consolidated_nops_account_regist
   parameters = {
     nOpsApiKey        = var.nOpsApiKey
     nOpsPrivateKey    = var.nOpsPrivateKey
-    AccNamePreFixToRegister = var.AccNamePreFixToRegister
   }
   capabilities = [
     "CAPABILITY_IAM",
@@ -31,7 +30,7 @@ resource "aws_cloudformation_stack_set" "member_consolidated_nops_account_regist
 
 resource "aws_cloudformation_stack_set_instance" "member_consolidated_ou_instances" {
   deployment_targets {
-    organizational_unit_ids = toset(var.list_of_OU_ids)
+    organizational_unit_ids = toset(var.org_root_id)
   }
 
   region         = data.aws_region.current.name

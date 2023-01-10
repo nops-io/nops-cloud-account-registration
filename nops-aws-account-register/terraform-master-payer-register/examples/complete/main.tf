@@ -1,6 +1,4 @@
 terraform {
-  # required_version = "0.15.1"
-
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -21,6 +19,5 @@ module "nops_aws_acc_register" {
   BucketName              = var.BucketName
   nOpsApiKey              = var.nOpsApiKey
   nOpsPrivateKey          = var.nOpsPrivateKey
-  AccNamePreFixToRegister = var.AccNamePreFixToRegister
   tags                    = var.tags
 }

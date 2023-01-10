@@ -14,7 +14,6 @@ resource "aws_cloudformation_stack" "master_payer_nops_account_register" {
     BucketName              = var.BucketName
     nOpsApiKey              = var.nOpsApiKey
     nOpsPrivateKey          = var.nOpsPrivateKey
-    AccNamePreFixToRegister = var.AccNamePreFixToRegister
   }
   capabilities = [
     "CAPABILITY_IAM",
