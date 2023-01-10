@@ -66,14 +66,12 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_AccNamePreFixToRegister"></a> [AccNamePreFixToRegister](#input\_AccNamePreFixToRegister) | Account name to register in nOps, Default it will be child-<account id>, and if value is provided then it will be <value provided>-<account id>. | `string` | `"child"` | no |
 | <a name="input_BucketName"></a> [BucketName](#input\_BucketName) | s3 bucket name for nOps daily cost usage reports (CUR). | `string` | `"nopsbucketforcostusagereports"` | no |
 | <a name="input_ReportName"></a> [ReportName](#input\_ReportName) | nOps daily generated report name | `string` | `"nopsbilling-daily-gzip"` | no |
-| <a name="input_list_of_OU_ids"></a> [list\_of\_OU\_ids](#input\_list\_of\_OU\_ids) | list of Organization unit ids to deploy stacks on member AWS accounts. | `list(string)` | n/a | yes |
 | <a name="input_member_acc_template_url"></a> [member\_acc\_template\_url](#input\_member\_acc\_template\_url) | CloudFormation template url for member accounts. | `string` | `"https://nops-register-aws-account-us-east-1.s3.amazonaws.com/member_consolidated_aws_acc_nops_register.yaml"` | no |
 | <a name="input_nOpsApiKey"></a> [nOpsApiKey](#input\_nOpsApiKey) | nOps api key to register AWS accounts | `string` | n/a | yes |
 | <a name="input_nOpsPrivateKey"></a> [nOpsPrivateKey](#input\_nOpsPrivateKey) | nOps private key to generate signature for api request, it should be single line string (optional). | `string` | n/a | yes |
-| <a name="input_org_root_id"></a> [org\_root\_id](#input\_org\_root\_id) | AWS Organization root id for CloudFormation stackset execution role. | `list(string)` | n/a | yes |
+| <a name="input_org_root_id"></a> [org\_root\_id](#input\_org\_root\_id) | AWS Organization root id for CloudFormation stackset to deploy stacks on member AWS accounts. | `list(string)` | n/a | yes |
 | <a name="input_s3prefix"></a> [s3prefix](#input\_s3prefix) | nOps daily generated reports folder prefix | `string` | `"nOpsbilling"` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to be applied to the resource | `map(any)` | `{}` | no |
 
