@@ -19,7 +19,7 @@ def main_function():
     external_id = environ.get("external_id")
     aws_acc_name_to_register_in_nops = environ.get("aws_acc_name_to_register_in_nops")
     client_id = api_key.split(".")[0]
-    url = f"https://app.nops.io/c/admin/projectaws/update_or_create_project?api_key={api_key}"
+    url = f"https://app.nops.io/c/admin/projectaws/update_or_create_project/?api_key={api_key}"
 
     if is_member_acc == "True":
         print("member account registration")
@@ -60,7 +60,7 @@ def main_function():
         private_key = private_key.split("\\n")
         private_key = "\n".join(private_key)
         date = datetime.datetime.now().strftime("%Y-%m-%d")
-        endpoint = f"/c/admin/projectaws/update_or_create_project?api_key={api_key}"
+        endpoint = f"/c/admin/projectaws/update_or_create_project/?api_key={api_key}"
         string_to_sign = f"{client_id}.{date}.{endpoint}"
         encryption_key = RSA.import_key(private_key)
         encoded_string = string_to_sign.encode()
