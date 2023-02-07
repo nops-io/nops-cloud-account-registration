@@ -30,7 +30,7 @@ Parameters:
 
   pGithubReleaseVersion:
     Type: String
-    Default: v0.3.1
+    Default: v0.3.2
     Description: github release version.
 
 Resources:
