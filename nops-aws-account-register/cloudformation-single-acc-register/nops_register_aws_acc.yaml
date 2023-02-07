@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: "cloudformation template to register AWS account to nOps"
 
-Parameters: 
+Parameters:
   ReportName:
     Type: String
     Default: nopsbilling-daily-gzip
@@ -25,12 +25,12 @@ Parameters:
   nOpsPrivateKey:
     Type: String
     NoEcho: true
-    Default: ''
+    Default: ""
     Description: nOps private key to generate signature for api request, it should be single line string eg.'\n' (optional).
 
   pGithubReleaseVersion:
     Type: String
-    Default: v0.3.2
+    Default: v0.3.3
     Description: github release version.
 
 Resources:
@@ -65,7 +65,7 @@ Resources:
               Bool:
                 "aws:SecureTransport": "false"
             Principal: "*"
-  
+
   rNopsZipCopierRole:
     Type: AWS::IAM::Role
     Properties:
@@ -194,9 +194,8 @@ Resources:
 
   nopsBucketForLogs:
     Type: AWS::S3::Bucket
-    Properties: 
-      BucketName: !Sub '${BucketName}-${AWS::AccountId}'
-
+    Properties:
+      BucketName: !Sub "${BucketName}-${AWS::AccountId}"
 
   BucketPolicy:
     Type: AWS::S3::BucketPolicy
@@ -204,51 +203,50 @@ Resources:
       Bucket: !Ref nopsBucketForLogs
       PolicyDocument:
         Version: 2012-10-17
-        Id : 'Policy1335892530063'
+        Id: "Policy1335892530063"
         Statement:
           - Action:
-              - 's3:GetBucketAcl'
-              - 's3:GetBucketPolicy'
+              - "s3:GetBucketAcl"
+              - "s3:GetBucketPolicy"
             Effect: Allow
-            Sid: 'Stmt1335892150622'
+            Sid: "Stmt1335892150622"
             Resource: !Join
-              - ''
-              - - 'arn:aws:s3:::'
+              - ""
+              - - "arn:aws:s3:::"
                 - !Ref nopsBucketForLogs
-            Principal: 
-              Service: 'billingreports.amazonaws.com'
+            Principal:
+              Service: "billingreports.amazonaws.com"
             Condition:
               StringEquals:
-                  aws:SourceArn: !Sub 'arn:aws:cur:${AWS::Region}:${AWS::AccountId}:definition/*'
-                  aws:SourceAccount: !Sub '${AWS::AccountId}'
+                aws:SourceArn: !Sub "arn:aws:cur:${AWS::Region}:${AWS::AccountId}:definition/*"
+                aws:SourceAccount: !Sub "${AWS::AccountId}"
 
           - Action:
-              - 's3:PutObject'
+              - "s3:PutObject"
             Effect: Allow
-            Sid: 'Stmt1335892526596'
+            Sid: "Stmt1335892526596"
             Resource: !Join
-              - ''
-              - - 'arn:aws:s3:::'
+              - ""
+              - - "arn:aws:s3:::"
                 - !Ref nopsBucketForLogs
                 - /*
-            Principal: 
-              Service: 'billingreports.amazonaws.com'
+            Principal:
+              Service: "billingreports.amazonaws.com"
             Condition:
               StringEquals:
-                  aws:SourceArn: !Sub 'arn:aws:cur:${AWS::Region}:${AWS::AccountId}:definition/*'
-                  aws:SourceAccount: !Sub '${AWS::AccountId}'
-
+                aws:SourceArn: !Sub "arn:aws:cur:${AWS::Region}:${AWS::AccountId}:definition/*"
+                aws:SourceAccount: !Sub "${AWS::AccountId}"
 
   nopsReportDefinition:
     Type: AWS::CUR::ReportDefinition
-    DependsOn: 
+    DependsOn:
       - nopsBucketForLogs
       - BucketPolicy
-    Properties: 
-      AdditionalArtifacts: 
+    Properties:
+      AdditionalArtifacts:
         - "REDSHIFT"
         - "QUICKSIGHT"
-      AdditionalSchemaElements: 
+      AdditionalSchemaElements:
         - "RESOURCES"
       Compression: "GZIP"
       RefreshClosedReports: true
@@ -257,28 +255,28 @@ Resources:
       ReportVersioning: "OVERWRITE_REPORT"
       S3Bucket: !Ref nopsBucketForLogs
       S3Prefix: !Ref s3prefix
-      S3Region: !Sub '${AWS::Region}'
+      S3Region: !Sub "${AWS::Region}"
       TimeUnit: "DAILY"
 
-  nopsLambdaExecutionRole: 
+  nopsLambdaExecutionRole:
     Type: "AWS::IAM::Role"
-    Properties: 
-      AssumeRolePolicyDocument: 
+    Properties:
+      AssumeRolePolicyDocument:
         Version: "2012-10-17"
-        Statement: 
+        Statement:
           - Effect: "Allow"
-            Principal: 
+            Principal:
               Service: "lambda.amazonaws.com"
-            Action: 
+            Action:
               - "sts:AssumeRole"
       Path: "/"
-      Policies: 
+      Policies:
         - PolicyName: "InlinePolicy"
-          PolicyDocument: 
+          PolicyDocument:
             Version: "2012-10-17"
-            Statement: 
+            Statement:
               - Effect: "Allow"
-                Action: 
+                Action:
                   - "logs:CreateLogGroup"
                   - "logs:CreateLogStream"
                   - "logs:PutLogEvents"
@@ -296,7 +294,7 @@ Resources:
       Runtime: "python3.9"
       Timeout: 150
       FunctionName: "generate-external-id"
-    DependsOn: 
+    DependsOn:
       - nopsLambdaExecutionRole
       - rTriggerCopyAccRegPackage
       - rTriggerCopyGenUUIDPackage
@@ -304,40 +302,38 @@ Resources:
   PermissionLambdaGenUUID:
     Type: "AWS::Lambda::Permission"
     Properties:
-      Action: 'lambda:InvokeFunction'
-      FunctionName: !GetAtt [ LambdaGenUUID, Arn ]
-      Principal: 'cloudformation.amazonaws.com'
+      Action: "lambda:InvokeFunction"
+      FunctionName: !GetAtt [LambdaGenUUID, Arn]
+      Principal: "cloudformation.amazonaws.com"
       SourceAccount: !Ref "AWS::AccountId"
-    DependsOn: 
+    DependsOn:
       - LambdaGenUUID
 
   TriggerLambdaGenUUID:
     Type: Custom::TriggerLambdaGenUUID
     Properties:
-      ServiceToken : !GetAtt [ LambdaGenUUID, Arn ]
-    DependsOn: 
+      ServiceToken: !GetAtt [LambdaGenUUID, Arn]
+    DependsOn:
       - PermissionLambdaGenUUID
 
-  nopsAccessIamRole: 
+  nopsAccessIamRole:
     Type: "AWS::IAM::Role"
-    DependsOn: 
+    DependsOn:
       - TriggerLambdaGenUUID
-    Properties: 
-      AssumeRolePolicyDocument: 
+    Properties:
+      AssumeRolePolicyDocument:
         Version: "2012-10-17"
-        Statement: 
+        Statement:
           - Effect: "Allow"
-            Principal: 
+            Principal:
               AWS: "202279780353"
-            Action: 
+            Action:
               - "sts:AssumeRole"
             Condition:
               StringEquals:
-                  sts:ExternalId: !GetAtt TriggerLambdaGenUUID.external_id
+                sts:ExternalId: !GetAtt TriggerLambdaGenUUID.external_id
       Path: "/"
-      ManagedPolicyArns: [
-        "arn:aws:iam::aws:policy/ReadOnlyAccess"
-      ]
+      ManagedPolicyArns: ["arn:aws:iam::aws:policy/ReadOnlyAccess"]
       Tags:
         - Key: version
           Value: 1.0.9
@@ -346,222 +342,222 @@ Resources:
 
   nopsIntegrationPolicy:
     Type: AWS::IAM::Policy
-    Properties:     
+    Properties:
       PolicyName: "InlinePolicy"
-      PolicyDocument: 
+      PolicyDocument:
         Version: "2012-10-17"
-        Statement: 
-              - Action:                 
-                  - cur:DescribeReportDefinitions
-                  - cur:DeleteReportDefinition
-                  - cur:PutReportDefinition
-                  - events:CreateEventBus
-                  - organizations:AcceptHandshake
-                  - organizations:CancelHandshake
-                  - organizations:DeclineHandshake
-                  - organizations:InviteAccountToOrganization
-                  - organizations:MoveAccount
-                  - s3:HeadBucket
-                  - s3:HeadObject
-                  - support:DescribeTrustedAdvisorCheckRefreshStatuses
-                  - support:DescribeTrustedAdvisorCheckResult
-                  - support:DescribeTrustedAdvisorChecks
-                  - wellarchitected:*
-                Effect: "Allow"
-                Resource: "*"
-              - Action:
-                  - acm-pca:Describe*
-                  - acm-pca:Get*
-                  - acm-pca:List*
-                  - acm:Describe*
-                  - acm:Get*
-                  - acm:List*
-                  - apigateway:GET
-                  - appconfig:GetConfiguration*
-                  - appflow:DescribeConnector*
-                  - appflow:ListConnector*
-                  - appstream:DescribeDirectoryConfigs
-                  - appstream:DescribeUsers
-                  - appstream:DescribeSessions
-                  - appsync:Get*
-                  - appsync:List*
-                  - athena:Get*
-                  - athena:List*
-                  - backup:GetBackupVaultAccessPolicy
-                  - cassandra:Select
-                  - chime:Describe*
-                  - chime:Get*
-                  - chime:List*
-                  - cloud9:Describe*
-                  - cloud9:Get*
-                  - cloud9:List*
-                  - clouddirectory:Get*
-                  - clouddirectory:List*
-                  - cloudfront:GetCloudFrontOriginAccessIdentity 
-                  - cloudfront:GetFieldLevelEncryption*
-                  - cloudfront:GetKeyGroupConfig
-                  - cloudwatch:GetMetricData
-                  - cloudwatch:GetMetricStream
-                  - cloudwatch:ListMetricStreams
-                  - codeartifact:GetAuthorizationToken
-                  - codeartifact:ReadFromRepository 
-                  - codebuild:BatchGet*
-                  - codebuild:ListSourceCredentials
-                  - codecommit:BatchGet*
-                  - codecommit:Get*
-                  - codecommit:GitPull
-                  - codedeploy:BatchGet*
-                  - codedeploy:Get*
-                  - codestar:DescribeUserProfile
-                  - codestar:ListUserProfiles
-                  - cognito-identity:*
-                  - cognito-idp:*
-                  - cognito-sync:*
-                  - comprehend:Describe*
-                  - comprehend:List*
-                  - config:BatchGetAggregateResourceConfig
-                  - config:BatchGetResourceConfig
-                  - config:SelectAggregateResourceConfig
-                  - config:SelectResourceConfig
-                  - connect:Describe*
-                  - connect:Get*
-                  - connect:List*
-                  - datapipeline:DescribeObjects
-                  - datapipeline:EvaluateExpression
-                  - datapipeline:QueryObjects
-                  - dax:BatchGetItem
-                  - dax:GetItem
-                  - dax:Query
-                  - deepcomposer:Get*
-                  - deepcomposer:List*
-                  - devicefarm:GetRemoteAccessSession
-                  - devicefarm:ListRemoteAccessSessions
-                  - directconnect:Describe*
-                  - directconnect:List*
-                  - discovery:Describe*
-                  - discovery:Get*
-                  - discovery:List*
-                  - dms:Describe*
-                  - dms:List*
-                  - ds:Get*
-                  - dynamodb:GetItem
-                  - dynamodb:BatchGetItem
-                  - dynamodb:Query
-                  - dynamodb:Scan
-                  - ec2:GetConsoleScreenshot
-                  - ecr:BatchGetImage
-                  - ecr:GetAuthorizationToken
-                  - ecr:GetDownloadUrlForLayer
-                  - ecr-public:GetAuthorizationToken
-                  - eks:DescribeIdentityProviderConfig
-                  - elasticbeanstalk:DescribeConfigurationOptions
-                  - elasticbeanstalk:DescribeConfigurationSettings
-                  - es:ESHttpGet*
-                  - fis:GetExperimentTemplate
-                  - fms:GetAdminAccount
-                  - frauddetector:BatchGetVariable
-                  - frauddetector:Get*
-                  - gamelift:GetGameSessionLogUrl
-                  - gamelift:GetInstanceAccess
-                  - geo:ListDevicePositions
-                  - glue:GetSecurityConfiguration*
-                  - glue:SearchTables
-                  - glue:GetTable*
-                  - guardduty:GetIPSet
-                  - guardduty:GetMasterAccount
-                  - guardduty:GetMembers
-                  - guardduty:ListMembers
-                  - guardduty:ListOrganizationAdminAccounts
-                  - inspector2:GetConfiguration
-                  - imagebuilder:GetImage
-                  - iotroborunner:Get*
-                  - iotsitewise:ListAccessPolicies
-                  - ivs:GetPlaybackKeyPair
-                  - ivs:GetStreamSession
-                  - kafka:GetBootstrapBrokers
-                  - kendra:Query*
-                  - kinesis:Get*
-                  - kms:DescribeKey
-                  - kms:GetPublicKey
-                  - lex:Get*
-                  - lambda:GetFunctionConfiguration
-                  - license-manager:GetGrant
-                  - license-manager:GetLicense
-                  - license-manager:ListTokens
-                  - lightsail:GetBucketAccessKeys
-                  - lightsail:GetCertificates
-                  - lightsail:GetContainerImages
-                  - lightsail:GetKeyPair
-                  - lightsail:GetRelationalDatabaseLogStreams
-                  - logs:GetLogEvents
-                  - logs:StartQuery
-                  - machinelearning:GetMLModel
-                  - macie2:GetAdministratorAccount
-                  - macie2:GetMember
-                  - macie2:GetMacieSession
-                  - macie2:SearchResources
-                  - macie2:GetSensitiveDataOccurrences
-                  - mobilehub:ExportProject
-                  - nimble:GetStreamingSession
-                  - polly:SynthesizeSpeech
-                  - proton:GetEnvironmentTemplate
-                  - proton:GetServiceTemplate
-                  - proton:ListServiceTemplates
-                  - proton:ListEnvironmentTemplates
-                  - qldb:GetBlock
-                  - qldb:GetDigest
-                  - rds:Download*
-                  - rekognition:CompareFaces
-                  - rekognition:Detect*
-                  - rekognition:Search*
-                  - resiliencehub:DescribeAppVersionTemplate
-                  - resiliencehub:ListRecommendationTemplates
-                  - robomaker:GetWorldTemplateBody
-                  - s3-object-lambda:GetObject
-                  - sagemaker:Search
-                  - schemas:GetDiscoveredSchema
-                  - sdb:Get*
-                  - sdb:Select*
-                  - secretsmanager:*
-                  - securityhub:GetFindings
-                  - securityhub:GetMembers
-                  - securityhub:ListMembers
-                  - ses:GetTemplate
-                  - ses:GetEmailTemplate
-                  - ses:GetContact
-                  - ses:GetContactList
-                  - ses:ListTemplates
-                  - ses:ListEmailTemplates
-                  - ses:ListVerifiedEmailAddresses
-                  - signer:GetSigningProfile
-                  - signer:ListProfilePermissions
-                  - signer:ListSigningProfiles
-                  - sms-voice:DescribeKeywords
-                  - sms-voice:DescribeOptedOutNumbers
-                  - sms-voice:DescribePhoneNumbers
-                  - sms-voice:DescribePools
-                  - snowball:Describe*
-                  - sqs:Receive*
-                  - ssm-contacts:*
-                  - ssm:DescribeParameters*
-                  - ssm:GetParameter*
-                  - sso:Describe*
-                  - sso:Get*
-                  - sso:List*
-                  - storagegateway:DescribeChapCredentials
-                  - support:DescribeCommunications
-                  - timestream:ListDatabases
-                  - timestream:ListTables
-                  - transcribe:Get*
-                  - transcribe:List*
-                  - transfer:Describe*
-                  - transfer:List*
-                  - waf-regional:GetChangeToken
-                  - workmail:DescribeUser
-                  - workmail:GetMailUserDetails
-                  - workmail:ListUsers
-                Effect: Deny
-                Resource: "*"
+        Statement:
+          - Action:
+              - cur:DescribeReportDefinitions
+              - cur:DeleteReportDefinition
+              - cur:PutReportDefinition
+              - events:CreateEventBus
+              - organizations:AcceptHandshake
+              - organizations:CancelHandshake
+              - organizations:DeclineHandshake
+              - organizations:InviteAccountToOrganization
+              - organizations:MoveAccount
+              - s3:HeadBucket
+              - s3:HeadObject
+              - support:DescribeTrustedAdvisorCheckRefreshStatuses
+              - support:DescribeTrustedAdvisorCheckResult
+              - support:DescribeTrustedAdvisorChecks
+              - wellarchitected:*
+            Effect: "Allow"
+            Resource: "*"
+          - Action:
+              - acm-pca:Describe*
+              - acm-pca:Get*
+              - acm-pca:List*
+              - acm:Describe*
+              - acm:Get*
+              - acm:List*
+              - apigateway:GET
+              - appconfig:GetConfiguration*
+              - appflow:DescribeConnector*
+              - appflow:ListConnector*
+              - appstream:DescribeDirectoryConfigs
+              - appstream:DescribeUsers
+              - appstream:DescribeSessions
+              - appsync:Get*
+              - appsync:List*
+              - athena:Get*
+              - athena:List*
+              - backup:GetBackupVaultAccessPolicy
+              - cassandra:Select
+              - chime:Describe*
+              - chime:Get*
+              - chime:List*
+              - cloud9:Describe*
+              - cloud9:Get*
+              - cloud9:List*
+              - clouddirectory:Get*
+              - clouddirectory:List*
+              - cloudfront:GetCloudFrontOriginAccessIdentity
+              - cloudfront:GetFieldLevelEncryption*
+              - cloudfront:GetKeyGroupConfig
+              - cloudwatch:GetMetricData
+              - cloudwatch:GetMetricStream
+              - cloudwatch:ListMetricStreams
+              - codeartifact:GetAuthorizationToken
+              - codeartifact:ReadFromRepository
+              - codebuild:BatchGet*
+              - codebuild:ListSourceCredentials
+              - codecommit:BatchGet*
+              - codecommit:Get*
+              - codecommit:GitPull
+              - codedeploy:BatchGet*
+              - codedeploy:Get*
+              - codestar:DescribeUserProfile
+              - codestar:ListUserProfiles
+              - cognito-identity:*
+              - cognito-idp:*
+              - cognito-sync:*
+              - comprehend:Describe*
+              - comprehend:List*
+              - config:BatchGetAggregateResourceConfig
+              - config:BatchGetResourceConfig
+              - config:SelectAggregateResourceConfig
+              - config:SelectResourceConfig
+              - connect:Describe*
+              - connect:Get*
+              - connect:List*
+              - datapipeline:DescribeObjects
+              - datapipeline:EvaluateExpression
+              - datapipeline:QueryObjects
+              - dax:BatchGetItem
+              - dax:GetItem
+              - dax:Query
+              - deepcomposer:Get*
+              - deepcomposer:List*
+              - devicefarm:GetRemoteAccessSession
+              - devicefarm:ListRemoteAccessSessions
+              - directconnect:Describe*
+              - directconnect:List*
+              - discovery:Describe*
+              - discovery:Get*
+              - discovery:List*
+              - dms:Describe*
+              - dms:List*
+              - ds:Get*
+              - dynamodb:GetItem
+              - dynamodb:BatchGetItem
+              - dynamodb:Query
+              - dynamodb:Scan
+              - ec2:GetConsoleScreenshot
+              - ecr:BatchGetImage
+              - ecr:GetAuthorizationToken
+              - ecr:GetDownloadUrlForLayer
+              - ecr-public:GetAuthorizationToken
+              - eks:DescribeIdentityProviderConfig
+              - elasticbeanstalk:DescribeConfigurationOptions
+              - elasticbeanstalk:DescribeConfigurationSettings
+              - es:ESHttpGet*
+              - fis:GetExperimentTemplate
+              - fms:GetAdminAccount
+              - frauddetector:BatchGetVariable
+              - frauddetector:Get*
+              - gamelift:GetGameSessionLogUrl
+              - gamelift:GetInstanceAccess
+              - geo:ListDevicePositions
+              - glue:GetSecurityConfiguration*
+              - glue:SearchTables
+              - glue:GetTable*
+              - guardduty:GetIPSet
+              - guardduty:GetMasterAccount
+              - guardduty:GetMembers
+              - guardduty:ListMembers
+              - guardduty:ListOrganizationAdminAccounts
+              - inspector2:GetConfiguration
+              - imagebuilder:GetImage
+              - iotroborunner:Get*
+              - iotsitewise:ListAccessPolicies
+              - ivs:GetPlaybackKeyPair
+              - ivs:GetStreamSession
+              - kafka:GetBootstrapBrokers
+              - kendra:Query*
+              - kinesis:Get*
+              - kms:DescribeKey
+              - kms:GetPublicKey
+              - lex:Get*
+              - lambda:GetFunctionConfiguration
+              - license-manager:GetGrant
+              - license-manager:GetLicense
+              - license-manager:ListTokens
+              - lightsail:GetBucketAccessKeys
+              - lightsail:GetCertificates
+              - lightsail:GetContainerImages
+              - lightsail:GetKeyPair
+              - lightsail:GetRelationalDatabaseLogStreams
+              - logs:GetLogEvents
+              - logs:StartQuery
+              - machinelearning:GetMLModel
+              - macie2:GetAdministratorAccount
+              - macie2:GetMember
+              - macie2:GetMacieSession
+              - macie2:SearchResources
+              - macie2:GetSensitiveDataOccurrences
+              - mobilehub:ExportProject
+              - nimble:GetStreamingSession
+              - polly:SynthesizeSpeech
+              - proton:GetEnvironmentTemplate
+              - proton:GetServiceTemplate
+              - proton:ListServiceTemplates
+              - proton:ListEnvironmentTemplates
+              - qldb:GetBlock
+              - qldb:GetDigest
+              - rds:Download*
+              - rekognition:CompareFaces
+              - rekognition:Detect*
+              - rekognition:Search*
+              - resiliencehub:DescribeAppVersionTemplate
+              - resiliencehub:ListRecommendationTemplates
+              - robomaker:GetWorldTemplateBody
+              - s3-object-lambda:GetObject
+              - sagemaker:Search
+              - schemas:GetDiscoveredSchema
+              - sdb:Get*
+              - sdb:Select*
+              - secretsmanager:*
+              - securityhub:GetFindings
+              - securityhub:GetMembers
+              - securityhub:ListMembers
+              - ses:GetTemplate
+              - ses:GetEmailTemplate
+              - ses:GetContact
+              - ses:GetContactList
+              - ses:ListTemplates
+              - ses:ListEmailTemplates
+              - ses:ListVerifiedEmailAddresses
+              - signer:GetSigningProfile
+              - signer:ListProfilePermissions
+              - signer:ListSigningProfiles
+              - sms-voice:DescribeKeywords
+              - sms-voice:DescribeOptedOutNumbers
+              - sms-voice:DescribePhoneNumbers
+              - sms-voice:DescribePools
+              - snowball:Describe*
+              - sqs:Receive*
+              - ssm-contacts:*
+              - ssm:DescribeParameters*
+              - ssm:GetParameter*
+              - sso:Describe*
+              - sso:Get*
+              - sso:List*
+              - storagegateway:DescribeChapCredentials
+              - support:DescribeCommunications
+              - timestream:ListDatabases
+              - timestream:ListTables
+              - transcribe:Get*
+              - transcribe:List*
+              - transfer:Describe*
+              - transfer:List*
+              - waf-regional:GetChangeToken
+              - workmail:DescribeUser
+              - workmail:GetMailUserDetails
+              - workmail:ListUsers
+            Effect: Deny
+            Resource: "*"
       Roles: [!Ref nopsAccessIamRole]
 
   nopsSystemBucketPolicy:
@@ -575,8 +571,8 @@ Resources:
             Action:
               - s3:*
             Resource:
-              - !Sub 'arn:aws:s3:::${BucketName}-${AWS::AccountId}'
-              - !Sub 'arn:aws:s3:::${BucketName}-${AWS::AccountId}/*'
+              - !Sub "arn:aws:s3:::${BucketName}-${AWS::AccountId}"
+              - !Sub "arn:aws:s3:::${BucketName}-${AWS::AccountId}/*"
       Roles: [!Ref nopsAccessIamRole]
 
   LambdaRegisterAwsAcc:
@@ -599,9 +595,9 @@ Resources:
           s3prefix: !Ref s3prefix
           private_key: !Ref nOpsPrivateKey
           iam_role_for_nops: !GetAtt nopsAccessIamRole.Arn
-          s3_bucket_name_for_nops: !Sub '${BucketName}-${AWS::AccountId}'
-          aws_acc_name_to_register_in_nops: !Sub 'master-payer-${AWS::AccountId}'
-    DependsOn: 
+          s3_bucket_name_for_nops: !Sub "${BucketName}-${AWS::AccountId}"
+          aws_acc_name_to_register_in_nops: !Sub "master-payer-${AWS::AccountId}"
+    DependsOn:
       - nopsLambdaExecutionRole
       - nopsAccessIamRole
       - rTriggerCopyAccRegPackage
@@ -610,12 +606,12 @@ Resources:
   PermissionLambdaRegisterAwsAcc:
     Type: "AWS::Lambda::Permission"
     Properties:
-      Action: 'lambda:InvokeFunction'
-      FunctionName: !GetAtt [ LambdaRegisterAwsAcc, Arn ]
-      Principal: 'cloudformation.amazonaws.com'
+      Action: "lambda:InvokeFunction"
+      FunctionName: !GetAtt [LambdaRegisterAwsAcc, Arn]
+      Principal: "cloudformation.amazonaws.com"
       SourceAccount: !Ref "AWS::AccountId"
 
   TriggerLambdaRegisterAwsAcc:
     Type: Custom::TriggerLambdaRegisterAwsAcc
     Properties:
-      ServiceToken : !GetAtt [ LambdaRegisterAwsAcc, Arn ]
+      ServiceToken: !GetAtt [LambdaRegisterAwsAcc, Arn]
