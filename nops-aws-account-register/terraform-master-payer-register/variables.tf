@@ -36,7 +36,7 @@ variable "nOpsPrivateKey" {
 
 variable "master_payer_acc_template_url" {
   type        = string
-  default     = "https://nops-register-aws-account-us-east-1.s3.amazonaws.com/nops_register_aws_acc-v0.3.2.yaml"
+  default     = "https://nops-register-aws-account-us-east-1.s3.amazonaws.com/nops_register_aws_acc-v0.3.3.yaml"
   description = "CloudFormation template url for consolidated billing master payer AWS account."
 }
 
