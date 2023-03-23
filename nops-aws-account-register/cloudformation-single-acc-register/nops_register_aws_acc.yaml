@@ -30,7 +30,7 @@ Parameters:
 
   pGithubReleaseVersion:
     Type: String
-    Default: v0.3.3
+    Default: v0.3.4
     Description: github release version.
 
 Resources:
@@ -336,9 +336,9 @@ Resources:
       ManagedPolicyArns: ["arn:aws:iam::aws:policy/ReadOnlyAccess"]
       Tags:
         - Key: version
-          Value: 1.0.9
+          Value: 1.0.16
         - Key: createdat
-          Value: 20221022
+          Value: 20230321
 
   nopsIntegrationPolicy:
     Type: AWS::IAM::Policy
@@ -351,12 +351,10 @@ Resources:
               - cur:DescribeReportDefinitions
               - cur:DeleteReportDefinition
               - cur:PutReportDefinition
+              - ce:ListCostAllocationTags
+              - ce:UpdateCostAllocationTagsStatus
               - events:CreateEventBus
-              - organizations:AcceptHandshake
-              - organizations:CancelHandshake
-              - organizations:DeclineHandshake
               - organizations:InviteAccountToOrganization
-              - organizations:MoveAccount
               - s3:HeadBucket
               - s3:HeadObject
               - support:DescribeTrustedAdvisorCheckRefreshStatuses
