@@ -26,6 +26,7 @@ LAMBDA_PACKAGES=(
 for LAMBDA_PACKAGE in "${LAMBDA_PACKAGES[@]}"
 do
   cd lambda_functions/${LAMBDA_PACKAGE}
+  pip --version
   pip install -r requirements.txt -t .
   zip -r ${LAMBDA_PACKAGE}.zip .
   cp ${LAMBDA_PACKAGE}.zip ${LAMBDA_PACKAGE}-${VERSION}.zip
