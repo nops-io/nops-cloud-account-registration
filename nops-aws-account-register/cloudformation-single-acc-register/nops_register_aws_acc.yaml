@@ -30,7 +30,7 @@ Parameters:
 
   pGithubReleaseVersion:
     Type: String
-    Default: v0.3.4
+    Default: v0.4.0
     Description: github release version.
 
 Resources:
@@ -582,7 +582,7 @@ Resources:
       PackageType: Zip
       Handler: "nops_register_aws_acc.cloudformation_handler"
       Role: !GetAtt nopsLambdaExecutionRole.Arn
-      Runtime: "python3.8"
+      Runtime: "python3.9"
       Timeout: 150
       FunctionName: "nops-register-aws-account"
       Environment:
