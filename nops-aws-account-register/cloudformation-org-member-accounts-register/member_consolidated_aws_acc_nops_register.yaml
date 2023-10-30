@@ -15,7 +15,7 @@ Parameters:
 
   pGithubReleaseVersion:
     Type: String
-    Default: v0.4.1
+    Default: v0.4.2
     Description: github release version.
 
 Resources:

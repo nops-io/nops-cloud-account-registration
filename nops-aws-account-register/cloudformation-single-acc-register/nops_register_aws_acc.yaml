@@ -30,7 +30,7 @@ Parameters:
 
   pGithubReleaseVersion:
     Type: String
-    Default: v0.4.1
+    Default: v0.4.2
     Description: github release version.
 
 Resources:
@@ -272,7 +272,7 @@ Resources:
       Role: !GetAtt nopsLambdaExecutionRole.Arn
       Runtime: "python3.9"
       Timeout: 150
-      FunctionName: "nops-generate-external-id-${AWS::Region}"
+      FunctionName: "nops-generate-external-id"
     DependsOn:
       - nopsLambdaExecutionRole
       - rTriggerCopyAccRegPackage
