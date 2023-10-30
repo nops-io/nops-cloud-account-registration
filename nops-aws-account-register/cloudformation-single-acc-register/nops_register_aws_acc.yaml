@@ -9,7 +9,7 @@ Parameters:
 
   s3prefix:
     Type: String
-    Default: something
+    Default: nopsbilling
     Description: nOps daily generated reports folder prefix.
 
   BucketName:
@@ -35,6 +35,7 @@ Parameters:
 
 Resources:
   rNopsDistBucket:
+  nops-cloud-account-registration-${AWS::Region}
     Type: AWS::S3::Bucket
     Properties:
       BucketEncryption:
@@ -236,27 +237,6 @@ Resources:
               StringEquals:
                 aws:SourceArn: !Sub "arn:aws:cur:${AWS::Region}:${AWS::AccountId}:definition/*"
                 aws:SourceAccount: !Sub "${AWS::AccountId}"
-
-  nopsReportDefinition:
-    Type: AWS::CUR::ReportDefinition
-    DependsOn:
-      - nopsBucketForLogs
-      - BucketPolicy
-    Properties:
-      AdditionalArtifacts:
-        - "REDSHIFT"
-        - "QUICKSIGHT"
-      AdditionalSchemaElements:
-        - "RESOURCES"
-      Compression: "GZIP"
-      RefreshClosedReports: true
-      Format: "textORcsv"
-      ReportName: !Ref ReportName
-      ReportVersioning: "OVERWRITE_REPORT"
-      S3Bucket: !Ref nopsBucketForLogs
-      S3Prefix: !Ref s3prefix
-      S3Region: !Sub "${AWS::Region}"
-      TimeUnit: "DAILY"
 
   nopsLambdaExecutionRole:
     Type: "AWS::IAM::Role"
