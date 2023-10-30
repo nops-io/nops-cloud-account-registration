@@ -9,7 +9,7 @@ Parameters:
 
   s3prefix:
     Type: String
-    Default: something
+    Default: nopsbilling
     Description: nOps daily generated reports folder prefix.
 
   BucketName:
@@ -30,7 +30,7 @@ Parameters:
 
   pGithubReleaseVersion:
     Type: String
-    Default: v0.4.0
+    Default: v0.4.1
     Description: github release version.
 
 Resources:
@@ -237,27 +237,6 @@ Resources:
                 aws:SourceArn: !Sub "arn:aws:cur:${AWS::Region}:${AWS::AccountId}:definition/*"
                 aws:SourceAccount: !Sub "${AWS::AccountId}"
 
-  nopsReportDefinition:
-    Type: AWS::CUR::ReportDefinition
-    DependsOn:
-      - nopsBucketForLogs
-      - BucketPolicy
-    Properties:
-      AdditionalArtifacts:
-        - "REDSHIFT"
-        - "QUICKSIGHT"
-      AdditionalSchemaElements:
-        - "RESOURCES"
-      Compression: "GZIP"
-      RefreshClosedReports: true
-      Format: "textORcsv"
-      ReportName: !Ref ReportName
-      ReportVersioning: "OVERWRITE_REPORT"
-      S3Bucket: !Ref nopsBucketForLogs
-      S3Prefix: !Ref s3prefix
-      S3Region: !Sub "${AWS::Region}"
-      TimeUnit: "DAILY"
-
   nopsLambdaExecutionRole:
     Type: "AWS::IAM::Role"
     Properties:
@@ -293,7 +272,7 @@ Resources:
       Role: !GetAtt nopsLambdaExecutionRole.Arn
       Runtime: "python3.9"
       Timeout: 150
-      FunctionName: "generate-external-id"
+      FunctionName: "nops-generate-external-id-${AWS::Region}"
     DependsOn:
       - nopsLambdaExecutionRole
       - rTriggerCopyAccRegPackage
