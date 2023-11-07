@@ -33,12 +33,20 @@ variable "nOpsPrivateKey" {
   sensitive   = true
   description = "nOps private key to generate signature for api request, it should be single line string (optional)."
 }
+
 variable "member_acc_template_url" {
   type        = string
-  default     = "https://nops-register-aws-account-us-east-1.s3.amazonaws.com/member_consolidated_aws_acc_nops_register-v0.4.2.yaml"
+  default     = "https://nops-register-aws-account-us-east-1.s3.amazonaws.com/member_consolidated_aws_acc_nops_register-v0.4.3.yaml"
   description = "CloudFormation template url for member accounts."
 }
+
 variable "org_root_id" {
   type        = list(string)
   description = "AWS Organization root id for CloudFormation stackset to deploy stacks on member AWS accounts."
+}
+
+variable "failure_tolerance_percentage" {
+  type        = string
+  description = "Failure Tolerance Percentage for StackSet"
+  default     = "20"
 }
