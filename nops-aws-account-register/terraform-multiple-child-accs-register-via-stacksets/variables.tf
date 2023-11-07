@@ -36,7 +36,7 @@ variable "nOpsPrivateKey" {
 
 variable "member_acc_template_url" {
   type        = string
-  default     = "https://nops-register-aws-account-us-east-1.s3.amazonaws.com/member_consolidated_aws_acc_nops_register-v0.4.2.yaml"
+  default     = "https://nops-register-aws-account-us-east-1.s3.amazonaws.com/member_consolidated_aws_acc_nops_register-v0.4.3.yaml"
   description = "CloudFormation template url for member accounts."
 }
 
