@@ -37,7 +37,7 @@ resource "aws_cloudformation_stack_set_instance" "member_consolidated_ou_instanc
   stack_set_name = aws_cloudformation_stack_set.member_consolidated_nops_account_register.name
 
   operation_preferences {
-    failure_tolerance_percentage = "25"
+    failure_tolerance_percentage = var.failure_tolerance_percentage
     max_concurrent_percentage = "100"
   }
 }
